@@ -20,7 +20,7 @@ PlotlyTools <- function(){
             pt[[
               query_tracenames[[.x]]
             ]]
-          return(qfun)
+          invisible(qfun)
         }}
     ) |>
       setNames(tracenames)
@@ -44,7 +44,7 @@ PlotlyTools <- function(){
             pt[[
               query_layoutnames[[.x]]
             ]]
-          return(qfun)
+          invisible(qfun)
         }}
     ) |>
       setNames(layoutreferenceNames)
@@ -70,7 +70,7 @@ generate_find_attribute <- function(url){
     rvest::html_elements("li") -> all_li
   all_li |>
     modify_href(url)
-  function(attrname){
+  function(attrname=NULL){
     all_li |>
       get_attribute_tagList(attrname) |>
       browsable()
@@ -103,10 +103,13 @@ get_plotly_references <- function(){
   html |>
     rvest::html_elements(
       ".--sidebar-item a"
-    ) |>
+    ) -> targets_a
+  targets_a |>
     purrr::map(
       ~xml2::xml_attr(.x, "href")
     ) -> allReferences
+  targets_a |>
+    rvest::html_text() -> allSubjects
   return(allReferences)
 }
 
@@ -125,11 +128,13 @@ get_referenceNames_referenceUrls <- function(){
     "https://plotly.com",
     allReferences[-whichIsTrace]
   ) -> layout_urls
-  tracenames <- basereferenceNames[whichIsTrace]
-  basereferenceNames[-whichIsTrace] |>
-    stringr::str_extract(
-      "(?<=(layout/))[^/]*"
-    ) -> layoutreferenceNames
+  tracenames <- allSubjects[whichIsTrace]
+  layoutreferenceNames <-
+    allSubjects[-whichIsTrace]
+  # basereferenceNames[-whichIsTrace] |>
+  #   stringr::str_extract(
+  #     "(?<=(layout/))[^/]*"
+  #   ) -> layoutreferenceNames
 
 }
 get_html <- function(a_from_LiX) {
@@ -154,7 +159,7 @@ turn_html <- function(x, brFront=F){
       c(brOpen, as.character(x), brClose))}
   )
 }
-get_attribute_tagList <- function(all_li, attrname) {
+get_attribute_tagList <- function(all_li, attrname=NULL) {
   purrr::map(
     all_li,
     ~{
@@ -166,7 +171,13 @@ get_attribute_tagList <- function(all_li, attrname) {
     ~{
       .x |>
         rvest::html_text() }) -> list_attributenames
+  if(is.null(attrname)) return(
+    {
+      list_attributenames |>
+        unlist() |>
+        stringr::str_remove_all('\\s')
 
+      })
   purrr::map(
     list_attributenames,
     ~{
