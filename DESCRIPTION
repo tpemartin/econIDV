@@ -12,3 +12,5 @@ LazyData: true
 RoxygenNote: 7.1.2
 Imports: 
     htmltools
+Depends: 
+    R (>= 2.10)

@@ -11,7 +11,7 @@
 #' @examples none.
 showTag <- function(shinyTag=NULL, js=NULL, css=NULL, ...){
   require(htmltools)
-  quo_tag = enquo(shinyTag)
+  quo_tag = rlang::enquo(shinyTag)
   tagname = rlang::as_label(quo_tag)
   dep_jquery =
     htmltools::htmlDependency(
@@ -33,7 +33,7 @@ showTag <- function(shinyTag=NULL, js=NULL, css=NULL, ...){
   )
 
   tagList(
-    shinyTag,
+    tags$div(shinyTag),
     tag_js,
     tag_css, ...,
     dep_jquery
@@ -89,7 +89,7 @@ show_page <- function(filepath){
     port=4321)
   browseURL(
     file.path(
-      "http://127.0.0.1:4321",
+      "http://127.0.0.1:4322",
       basename(filepath))
   )
 }
