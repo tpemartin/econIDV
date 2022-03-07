@@ -7,8 +7,8 @@
 PlotlyTools <- function(){
   pt <- new.env()
   pt$query_trace <- {
-    data("trace_urls")
-    data("tracenames")
+    trace_urls = econIDV::trace_urls
+    tracenames = econIDV::tracenames
     query_tracenames = paste0("query_", tracenames)
     purrr::map(
       seq_along(trace_urls),
@@ -29,8 +29,9 @@ PlotlyTools <- function(){
   # pt$query_bar("color")
   # pt$query_trace$bar()("font")
   pt$query_layout <-{
-    data("layout_urls")
-    data("layoutreferenceNames")
+    layout_urls = econIDV::layout_urls
+    layoutreferenceNames = econIDV::layoutreferenceNames
+
     query_layoutnames = paste0("query_", layoutreferenceNames)
     purrr::map(
       seq_along(layout_urls),
@@ -61,6 +62,7 @@ PlotlyTools <- function(){
 #'
 #' @examples find_attr <- generate_find_attribute("https://plotly.com/r/reference/scatter/")
 generate_find_attribute <- function(url){
+  # url = "https://plotly.com/r/reference/scatter/"
   url |>
     stringr::str_remove("/$")
   # url = "https://plotly.com/r/reference/scatter/"
@@ -70,10 +72,10 @@ generate_find_attribute <- function(url){
     rvest::html_elements("li") -> all_li
   all_li |>
     modify_href(url)
-  function(attrname=NULL){
+  function(attrname=NULL, regex=F){
     all_li |>
-      get_attribute_tagList(attrname) |>
-      browsable()
+      get_attribute_tagList(attrname, regex) |>
+      htmltools::browsable()
     # all_li |> find_li_with_attribute(attrname) -> target_li
     #
     # require(htmltools)
@@ -137,10 +139,12 @@ get_referenceNames_referenceUrls <- function(){
   #   ) -> layoutreferenceNames
 
 }
-get_html <- function(a_from_LiX) {
+get_html <- function(a_from_LiX, hrefX) {
   a_from_LiX |>
     xml2::xml_siblings() -> a_siblings
-  tagList(
+  htmltools::tagList(
+    htmltools::tags$hr(),
+    htmltools::tags$h4(hrefX),
     a_from_LiX |> turn_html(brFront=T) |> unique(),
     a_siblings |> turn_html() |> unique())
 }
@@ -155,11 +159,11 @@ turn_html <- function(x, brFront=F){
     brClose="<br/>"
   }
   purrr::map(
-    x, ~{HTML(
+    x, ~{htmltools::HTML(
       c(brOpen, as.character(x), brClose))}
   )
 }
-get_attribute_tagList <- function(all_li, attrname=NULL) {
+get_attribute_tagList <- function(all_li, attrname=NULL, regex=F) {
   purrr::map(
     all_li,
     ~{
@@ -178,10 +182,12 @@ get_attribute_tagList <- function(all_li, attrname=NULL) {
         stringr::str_remove_all('\\s')
 
       })
+
+  which_fix = ifelse(regex, which_fitRegex, which_fitWord)
   purrr::map(
     list_attributenames,
     ~{
-      which(stringr::str_detect(.x, glue::glue("\\b{attrname}\\b")))
+      which_fix(.x, attrname)
     }
   ) -> amongWhichAIsTarget
 
@@ -191,20 +197,96 @@ get_attribute_tagList <- function(all_li, attrname=NULL) {
   ) -> pickLi
   amongWhichAIsTarget2 <- amongWhichAIsTarget[pickLi]
   all_li[pickLi] -> LiPicked
+  LiPicked |> get_list_href() -> list_hrefs
   APicked <- list_a[pickLi]
   # .x=25
   list_html <- vector("list", length(APicked))
   for(.x in seq_along(APicked)){
     a_from_LiX <- APicked[[.x]][amongWhichAIsTarget2[[.x]]]
+    hrefX <- list_hrefs[[.x]][amongWhichAIsTarget2[[.x]]]
     a_from_LiX |>
-      purrr::map(get_html) -> list_html[[.x]]
+      purrr::map2(hrefX, get_html) -> list_html[[.x]]
   }
   unique(list_html) -> list_html
   list_html |>
-    as.tags()
+    htmltools::as.tags()
 }
 
+# helpers -----------------------------------------------------------------
+get_attributes_structure <- function(LiPicked) {
+  LiPicked |>
+    get_href_all() -> list_hrefs
+  attStructure <- new.env()
+  list_hrefs |>
+    purrr::map(
+      ~{ stringr::str_extract(.x, "#.*$") }
+    ) -> list_hrefs
+  attStructure$hrefStructure <- list()
+  for(.y in seq_along(list_hrefs)){
+    # .x=190
+    list_hrefs[[.y]] |>
+      stringr::str_replace_all("[#-]", "$") -> retrieveString
+    purrr::walk(
+      retrieveString,
+      ~evalRetrieveString_safely(.x, .y, attStructure)
+    )
 
+  }
+  # attStructure$hrefStructure |> names() |>
+  #   stringr::str_which("", negate=F) -> tracename
+  # attStructure$hrefStructure[[tracename]]
+  attStructure$hrefStructure
+}
+
+which_fitWord <- function(.x, attrname) {
+  which(
+    stringr::str_detect(.x, glue::glue("\\b{attrname}\\b"))
+  )
+}
+which_fitRegex <- function(.x, pattern) {
+  which(
+    stringr::str_detect(.x, pattern)
+  )
+}
+
+get_href <- function(el){
+  rvest::html_elements(el, "a") -> nodeSet
+  rvest::html_attr(
+    nodeSet,
+    "href")
+}
+get_href_safely = purrr::safely(get_href)
+
+get_href_all <- function(all_li) {
+  all_li |>
+    purrr::map(
+      ~get_href_safely(.x)
+    ) -> list_href
+
+  list_href |>
+    purrr::map(
+      purrr::pluck("result")
+    ) -> list_href
+  return(list_href)
+}
+
+evalRetrieveString <- function(.x, .y, attStructure){
+  # .x=retrieveString[[1]]
+  # .y=1
+  rlang::parse_expr(
+    paste0("hrefStructure",.x,"<-",.y)) |>
+    rlang::eval_bare(env = attStructure)
+}
+evalRetrieveString_safely = purrr::safely(evalRetrieveString)
+get_list_href <- function(LiPicked) {
+  LiPicked |>
+    get_href_all() -> list_hrefs
+
+  list_hrefs |>
+    purrr::map(
+      ~{ stringr::str_extract(.x, "#.*$") }
+    ) -> list_hrefs
+}
 
 
 
