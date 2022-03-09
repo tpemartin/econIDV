@@ -33,14 +33,20 @@ PlotlyTools <- function(){
     layoutreferenceNames = econIDV::layoutreferenceNames
     layoutreferenceNames[[1]] = "Title and others"
     query_layoutnames = paste0("query_", layoutreferenceNames)
+    layout_urls |>
+      stringr::str_subset("#") -> layout_section_urls
+
     purrr::map(
       seq_along(layout_urls),
       # generate_find_attribute,
       # seq_along(trace_urls),
       ~{
         function() {
-          generate_find_attribute(
-            layout_urls[[.x]])-> qfun
+          get_layout_qfun(
+            layout_urls[[.x]],
+            layout_section_urls)-> qfun
+          # generate_find_attribute(
+          #   layout_urls[[.x]])-> qfun
           qfun ->
             pt[[
               query_layoutnames[[.x]]

@@ -47,7 +47,7 @@ get_valid_all_li <- function(targetUrl, layout_section_urls) {
   all_li |> get_list_href() -> list_hrefs
   list_hrefs |>
     get_layoutSectionStart(layout_section_urls) -> sectionStarts
-  sectionEnds <- c(sectionStarts[2:(length(all_li)-1)], length(all_li))
+  sectionEnds <- c(sectionStarts[2:length(sectionStarts)]-1, length(all_li))
   whichSectionStarts = which(layout_section_urls==targetUrl)
   valid_all_li = all_li[
     sectionStarts[[whichSectionStarts]]:sectionEnds[[whichSectionStarts]]
