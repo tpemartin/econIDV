@@ -107,9 +107,17 @@ showTag <- function(shinyTag=NULL, js=NULL, css=NULL, ...){
   tag_js <- get_tag_js(js)
   tag_css <- get_tag_css(css)
 
+  flag_invalidTagname =
+    stringr::str_detect(
+      tagname, "[^a-zA-Z0-9\\-_]"
+    )
   filepath <- create_filepath(
-    filename=
+    filename=ifelse(
+      flag_invalidTagname,
+      "widget.html",
       paste0(tagname,".html")
+    )
+
   )
 
   tagList(

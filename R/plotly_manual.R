@@ -41,10 +41,13 @@ PlotlyTools <- function(){
       # generate_find_attribute,
       # seq_along(trace_urls),
       ~{
+        isLayoutSection =
+          layout_urls[[.x]] %in%
+          layout_section_urls
         function() {
           get_layout_qfun(
             layout_urls[[.x]],
-            layout_section_urls)-> qfun
+            layout_section_urls, isLayoutSection)-> qfun
           # generate_find_attribute(
           #   layout_urls[[.x]])-> qfun
           qfun ->
@@ -67,7 +70,7 @@ PlotlyTools <- function(){
 #' @export
 #'
 #' @examples find_attr <- generate_find_attribute("https://plotly.com/r/reference/scatter/")
-generate_find_attribute <- function(url){
+generate_find_attribute <- function(url, isLayoutSection=T){
   # url = "https://plotly.com/r/reference/scatter/"
   # url=layout_urls[[6]]
   url |>
@@ -78,6 +81,7 @@ generate_find_attribute <- function(url){
   html |>
     rvest::html_elements("li") -> all_li
   urlNew=stringr::str_remove(url, "/#.*$")
+  # all_li |> get_href_fullpath()
   all_li |>
     modify_href(urlNew)
   function(attrname=NULL, regex=F, onlyTitle=T, checkHref=T){
@@ -86,7 +90,7 @@ generate_find_attribute <- function(url){
       regex <- onlyTitle <- checkHref <- T
     }
     all_li |>
-      get_attribute_tagList(attrname, regex, onlyTitle, checkHref) -> resultTagList
+      get_attribute_tagList(attrname, regex, onlyTitle, checkHref, isLayoutSection) -> resultTagList
     resultTagList |>
       htmltools::browsable()
     # all_li |> find_li_with_attribute(attrname) -> target_li
@@ -185,7 +189,7 @@ turn_html <- function(x, brFront=F){
       c(brOpen, as.character(x), brClose))}
   )
 }
-get_attribute_tagList <- function(all_li, attrname=NULL, regex=F, onlyTitle=F, checkHref=T) {
+get_attribute_tagList <- function(all_li, attrname=NULL, regex=F, onlyTitle=F, checkHref=T, isLayoutSection=T) {
   purrr::map(
     all_li,
     ~{
@@ -245,7 +249,7 @@ get_attribute_tagList <- function(all_li, attrname=NULL, regex=F, onlyTitle=F, c
     list_hrefs |>
       get_all_fitAttrs(amongWhichAIsTarget2) ->
       attrsFit
-    purrr::map(attrsFit, generate_aTagX) |>
+    purrr::map(attrsFit, ~generate_aTagX(.x, isLayoutSection)) |>
       htmltools::as.tags() -> fitTags #|> browsable()
 
     return(fitTags)
@@ -256,7 +260,7 @@ get_attribute_tagList <- function(all_li, attrname=NULL, regex=F, onlyTitle=F, c
 # helpers -----------------------------------------------------------------
 get_attributes_structure <- function(LiPicked) {
   LiPicked |>
-    get_href_all() -> list_hrefs
+    get_href_fullpath() -> list_hrefs
   attStructure <- new.env()
   list_hrefs |>
     purrr::map(
@@ -300,7 +304,7 @@ get_href <- function(el){
 }
 get_href_safely = purrr::safely(get_href)
 
-get_href_all <- function(all_li) {
+get_href_fullpath <- function(all_li) {
   all_li |>
     purrr::map(
       ~get_href_safely(.x)
@@ -323,7 +327,7 @@ evalRetrieveString <- function(.x, .y, attStructure){
 evalRetrieveString_safely = purrr::safely(evalRetrieveString)
 get_list_href <- function(LiPicked) {
   LiPicked |>
-    get_href_all() -> list_hrefs
+    get_href_fullpath() -> list_hrefs
 
   list_hrefs |>
     purrr::map(
@@ -349,16 +353,29 @@ get_list_html <- function(APicked, list_hrefs, amongWhichAIsTarget2) {
   unique(list_html) -> list_html
   return(list_html)
 }
-generate_aTagX <- function(attrsFitX) {
+generate_aTagX <- function(attrsFitX, isLayoutSection) {
   kind=stringr::str_extract(
     attrsFitX[[1]],
     "(?<=#)[^-]*"
   )
-  htmltools::tagList(
-    htmltools::tags$a(href=paste0(
-      glue::glue("https://plotly.com//r/reference/{kind}/"), attrsFitX),
-      attrsFitX), htmltools::tags$br()
-  )
+  if(isLayoutSection){
+    htmltools::tagList(
+      htmltools::tags$a(href=paste0(
+        glue::glue("https://plotly.com//r/reference/{kind}/"), attrsFitX),
+        attrsFitX), htmltools::tags$br()
+    )
+  } else {
+    # attrsFitX = attrsFit[[25]]
+    stringr::str_extract(
+      attrsFitX, "(?<=#layout-)[^-]*"
+    ) -> subpath
+    htmltools::tagList(
+      htmltools::tags$a(href=paste0(
+        glue::glue("https://plotly.com//r/reference/layout/{subpath}/"), attrsFitX),
+        attrsFitX), htmltools::tags$br()
+    ) #|> htmltools::browsable()
+    }
+
 }
 
 

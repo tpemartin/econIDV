@@ -1,4 +1,4 @@
-get_layout_qfun <- function(targetUrl, layout_section_urls) {
+get_layout_qfun <- function(targetUrl, layout_section_urls, isLayoutSection) {
   targetUrl |>
     stringr::str_detect("#") -> flag_section
   if(flag_section){
@@ -7,7 +7,7 @@ get_layout_qfun <- function(targetUrl, layout_section_urls) {
     ) -> qfun
   } else {
     generate_find_attribute(
-      targetUrl)-> qfun
+      targetUrl, isLayoutSection)-> qfun
   }
   qfun
 }

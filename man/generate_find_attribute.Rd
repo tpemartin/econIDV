@@ -4,7 +4,7 @@
 \alias{generate_find_attribute}
 \title{Generate find_attribute function under given plotly reference url}
 \usage{
-generate_find_attribute(url)
+generate_find_attribute(url, isLayoutSection = T)
 }
 \arguments{
 \item{url}{a plotly reference url, such as https://plotly.com/r/reference/scatter/}

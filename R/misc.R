@@ -54,3 +54,31 @@ unload_reload <- function(){
   unloadNamespace("econIDV")
   library(econIDV)
 }
+#' As browseURL but it browse a shiny.tag or html class object in RStudio Viewer
+#'
+#' @param tag A shiny.tag or html class object
+#'
+#' @return
+#' @export
+#'
+#' @examples none
+showWidget <- function(tag=.Last.value){
+  if(!dir.exists("temp")) dir.create("temp")
+  servr::daemon_stop()
+  htmltools::save_html(
+    tagList(tag, dep_mobile()), file=file.path("temp","temp.html")
+  )
+  ss <- servr::httd("temp")
+  # ss$port
+  rstudioapi::viewer(glue::glue("http://127.0.0.1:{ss$port}/temp.html"))
+}
+dep_mobile <- function(){
+  htmltools::htmlDependency(
+    name="temp",
+    version="1.0.0",
+    src=c(file="assets/"),
+    meta=list(
+      viewport="width=device-width, initial-scale=1.0"
+    )
+  ) -> dep_mobile
+}
