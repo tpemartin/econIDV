@@ -63,6 +63,7 @@ PlotlyTools <- function(){
 #' @examples find_attr <- generate_find_attribute("https://plotly.com/r/reference/scatter/")
 generate_find_attribute <- function(url){
   # url = "https://plotly.com/r/reference/scatter/"
+  # url=layout_urls[[6]]
   url |>
     stringr::str_remove("/$")
   # url = "https://plotly.com/r/reference/scatter/"
@@ -70,15 +71,17 @@ generate_find_attribute <- function(url){
   rvest::read_html(url) -> html
   html |>
     rvest::html_elements("li") -> all_li
+  urlNew=stringr::str_remove(url, "/#.*$")
   all_li |>
-    modify_href(url)
-  function(attrname=NULL, regex=F, onlyTitle=F, checkHref=F){
+    modify_href(urlNew)
+  function(attrname=NULL, regex=F, onlyTitle=T, checkHref=T){
     if(is.null(attrname)){
       attrname=".*"
       regex <- onlyTitle <- checkHref <- T
     }
     all_li |>
-      get_attribute_tagList(attrname, regex, onlyTitle, checkHref) |>
+      get_attribute_tagList(attrname, regex, onlyTitle, checkHref) -> resultTagList
+    resultTagList |>
       htmltools::browsable()
     # all_li |> find_li_with_attribute(attrname) -> target_li
     #
@@ -91,13 +94,22 @@ generate_find_attribute <- function(url){
   }
 }
 modify_href <- function(target_li, url) {
+  # .li=all_li[[1]]
+  # .li=all_li[[91]]
   for(.li in target_li){
     .li |>
-      xml2::xml_find_all("a") |>
+      xml2::xml_find_all("a") -> aTags
+    aTags |>
       purrr::walk(
         ~{
-          file.path(
-            url, xml2::xml_attr(.x, "href") ) ->
+          oldUrl = xml2::xml_attr(.x, "href")
+          newUrl = ifelse(
+            stringr::str_detect(
+              oldUrl, "^http"),
+            oldUrl,
+            file.path(url, oldUrl)
+          )
+          newUrl ->
             xml2::xml_attr(.x, "href")
         }
       )
@@ -167,7 +179,7 @@ turn_html <- function(x, brFront=F){
       c(brOpen, as.character(x), brClose))}
   )
 }
-get_attribute_tagList <- function(all_li, attrname=NULL, regex=F, onlyTitle=F, checkHref=F) {
+get_attribute_tagList <- function(all_li, attrname=NULL, regex=F, onlyTitle=F, checkHref=T) {
   purrr::map(
     all_li,
     ~{
@@ -213,24 +225,24 @@ get_attribute_tagList <- function(all_li, attrname=NULL, regex=F, onlyTitle=F, c
   LiPicked |> get_list_href() -> list_hrefs
   APicked <- list_a[pickLi]
   # .x=25
-  list_html <- vector("list", length(APicked))
-  for(.x in seq_along(APicked)){
-    a_from_LiX <- APicked[[.x]][amongWhichAIsTarget2[[.x]]]
-    hrefX <- list_hrefs[[.x]][amongWhichAIsTarget2[[.x]]]
-    a_from_LiX |>
-      purrr::map2(hrefX, get_html) -> list_html[[.x]]
-  }
-  unique(list_html) -> list_html
 
   if(!onlyTitle) {
+    APicked |>
+      get_list_html(list_hrefs, amongWhichAIsTarget2) -> list_html
     list_html |>
-      htmltools::as.tags() |>
-      htmltools::browsable()
+      htmltools::as.tags() -> fitTags
+
+    return(fitTags)
+    #|>
+      # htmltools::browsable()
   } else {
     list_hrefs |>
       get_all_fitAttrs(amongWhichAIsTarget2) ->
       attrsFit
-    return(attrsFit)
+    purrr::map(attrsFit, generate_aTagX) |>
+      htmltools::as.tags() -> fitTags #|> browsable()
+
+    return(fitTags)
   }
 
 }
@@ -263,7 +275,9 @@ get_attributes_structure <- function(LiPicked) {
 
 which_fitWord <- function(.x, attrname) {
   which(
-    stringr::str_detect(.x, glue::glue("\\b{attrname}\\b"))
+    stringr::str_detect(.x,
+      stringr::fixed(attrname))
+      # glue::glue("\\b{attrname}\\b"))
   )
 }
 which_fitRegex <- function(.x, pattern) {
@@ -318,7 +332,28 @@ get_all_fitAttrs <- function(list_hrefs, amongWhichAIsTarget2){
     unique()
 
 }
-
+get_list_html <- function(APicked, list_hrefs, amongWhichAIsTarget2) {
+  list_html <- vector("list", length(APicked))
+  for(.x in seq_along(APicked)){
+    a_from_LiX <- APicked[[.x]][amongWhichAIsTarget2[[.x]]]
+    hrefX <- list_hrefs[[.x]][amongWhichAIsTarget2[[.x]]]
+    a_from_LiX |>
+      purrr::map2(hrefX, get_html) -> list_html[[.x]]
+  }
+  unique(list_html) -> list_html
+  return(list_html)
+}
+generate_aTagX <- function(attrsFitX) {
+  kind=stringr::str_extract(
+    attrsFitX[[1]],
+    "(?<=#)[^-]*"
+  )
+  htmltools::tagList(
+    htmltools::tags$a(href=paste0(
+      glue::glue("https://plotly.com//r/reference/{kind}/"), attrsFitX),
+      attrsFitX), htmltools::tags$br()
+  )
+}
 
 
 # find_trace_attribute$bar("family")
