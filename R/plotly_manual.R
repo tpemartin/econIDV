@@ -23,7 +23,7 @@ PlotlyTools <- function(){
           invisible(qfun)
         }}
     ) |>
-      setNames(tracenames)
+      stats::setNames(tracenames)
   }
   # debug(pt$query_bar)
   # pt$query_bar("color")
@@ -31,7 +31,7 @@ PlotlyTools <- function(){
   pt$query_layout <-{
     layout_urls = econIDV::layout_urls
     layoutreferenceNames = econIDV::layoutreferenceNames
-
+    layoutreferenceNames[[1]] = "Title and others"
     query_layoutnames = paste0("query_", layoutreferenceNames)
     purrr::map(
       seq_along(layout_urls),
@@ -48,7 +48,7 @@ PlotlyTools <- function(){
           invisible(qfun)
         }}
     ) |>
-      setNames(layoutreferenceNames)
+      stats::setNames(layoutreferenceNames)
   }
 
   return(pt)
@@ -72,9 +72,13 @@ generate_find_attribute <- function(url){
     rvest::html_elements("li") -> all_li
   all_li |>
     modify_href(url)
-  function(attrname=NULL, regex=F){
+  function(attrname=NULL, regex=F, onlyTitle=F, checkHref=F){
+    if(is.null(attrname)){
+      attrname=".*"
+      regex <- onlyTitle <- checkHref <- T
+    }
     all_li |>
-      get_attribute_tagList(attrname, regex) |>
+      get_attribute_tagList(attrname, regex, onlyTitle, checkHref) |>
       htmltools::browsable()
     # all_li |> find_li_with_attribute(attrname) -> target_li
     #
@@ -163,18 +167,23 @@ turn_html <- function(x, brFront=F){
       c(brOpen, as.character(x), brClose))}
   )
 }
-get_attribute_tagList <- function(all_li, attrname=NULL, regex=F) {
+get_attribute_tagList <- function(all_li, attrname=NULL, regex=F, onlyTitle=F, checkHref=F) {
   purrr::map(
     all_li,
     ~{
       .x |>
         rvest::html_elements("a.attribute-name")}) ->
     list_a
+  html_which <- ifelse(
+    checkHref || is.numeric(attrname),
+    function(x) rvest::html_attr(x, "href"),
+    rvest::html_text
+  )
   purrr::map(
     list_a,
     ~{
       .x |>
-        rvest::html_text() }) -> list_attributenames
+        html_which() }) -> list_attributenames
   if(is.null(attrname)) return(
     {
       list_attributenames |>
@@ -182,8 +191,12 @@ get_attribute_tagList <- function(all_li, attrname=NULL, regex=F) {
         stringr::str_remove_all('\\s')
 
       })
+  if(is.numeric(attrname)){
+    which_fix = function(x, attrname) which(stringr::str_count(x, "-") == attrname)
+  } else {
+    which_fix = ifelse(regex, which_fitRegex, which_fitWord)
+  }
 
-  which_fix = ifelse(regex, which_fitRegex, which_fitWord)
   purrr::map(
     list_attributenames,
     ~{
@@ -208,8 +221,18 @@ get_attribute_tagList <- function(all_li, attrname=NULL, regex=F) {
       purrr::map2(hrefX, get_html) -> list_html[[.x]]
   }
   unique(list_html) -> list_html
-  list_html |>
-    htmltools::as.tags()
+
+  if(!onlyTitle) {
+    list_html |>
+      htmltools::as.tags() |>
+      htmltools::browsable()
+  } else {
+    list_hrefs |>
+      get_all_fitAttrs(amongWhichAIsTarget2) ->
+      attrsFit
+    return(attrsFit)
+  }
+
 }
 
 # helpers -----------------------------------------------------------------
@@ -286,6 +309,14 @@ get_list_href <- function(LiPicked) {
     purrr::map(
       ~{ stringr::str_extract(.x, "#.*$") }
     ) -> list_hrefs
+}
+get_all_fitAttrs <- function(list_hrefs, amongWhichAIsTarget2){
+  purrr::map(
+    seq_along(list_hrefs),
+    ~{list_hrefs[[.x]][amongWhichAIsTarget2[[.x]]]}
+  ) |> unlist() |>
+    unique()
+
 }
 
 

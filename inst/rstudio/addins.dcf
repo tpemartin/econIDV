@@ -3,3 +3,13 @@ Description: New Addin Description
 Binding: update_package
 Interactive: false
 
+Name: Clear up globalEnv
+Description: New Addin Description
+Binding: remove_unwanted
+Interactive: false
+
+Name: Reload package
+Description: New Addin Description
+Binding: unload_reload
+Interactive: false
+
