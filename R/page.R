@@ -6,7 +6,8 @@ page_ui <-function(content=sectionPanel(), footerOn=c("首頁","找人", "找事
         # class = "page-sectionPanel",
       content,
         # sectionContainer()),
-      footer(onType=footerOn)
+      footer(onType=footerOn),
+      tags$script("screen.orientation.lock();")
       )
 }
 sectionHeader <- function(){tags$div(class = "sectionHeader",
