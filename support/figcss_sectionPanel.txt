@@ -1,0 +1,192 @@
+/* sectionPanel */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 30px 20px 20px;
+
+position: static;
+width: 375px;
+height: 709px;
+left: 0px;
+top: 0px;
+overflow-y: scroll;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 1;
+margin: 0px 0px;
+
+
+/* sectionPanel-section */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 0px;
+
+position: static;
+width: 335px;
+height: 943.42px;
+left: 20px;
+top: 30px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+margin: 10px 0px;
+
+
+/* sectionPanel-section-sectionTitle */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-end;
+padding: 0px;
+
+position: static;
+width: 335px;
+height: 50px;
+left: 0px;
+top: 0px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+margin: 29px 0px;
+
+
+/* sectionPanel-section-sectionTitle-logo */
+
+position: static;
+width: 50px;
+height: 50px;
+left: 0px;
+top: 0px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+margin: 0px 32px;
+
+
+/* ntpuecon */
+
+position: absolute;
+left: 0.21%;
+right: -0.21%;
+top: 0.43%;
+bottom: -0.43%;
+
+background: #0C2973;
+border: 1px solid #FFFFFF;
+
+
+/* sectionPanel-section-sectionTitle-title */
+
+position: static;
+width: 96px;
+height: 28px;
+left: 82px;
+top: 22px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 24px;
+line-height: 28px;
+display: flex;
+align-items: flex-end;
+
+color: #000000;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+margin: 0px 32px;
+
+
+/* sectionPanel-section-graph */
+
+position: static;
+width: 313.01px;
+height: 197.42px;
+left: 11px;
+top: 79px;
+
+background: url(image.png);
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+margin: 29px 0px;
+
+
+/* sectionPanel-section-title */
+
+position: static;
+width: 335px;
+height: 84px;
+left: 0px;
+top: 305.42px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 24px;
+line-height: 28px;
+display: flex;
+align-items: flex-end;
+text-align: center;
+
+color: #000000;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: stretch;
+flex-grow: 0;
+margin: 29px 0px;
+
+
+/* sectionPanel-section-story */
+
+position: static;
+width: 335px;
+height: 525px;
+left: 0px;
+top: 418.42px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+line-height: 21px;
+
+color: #000000;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+align-self: stretch;
+flex-grow: 0;
+margin: 29px 0px;

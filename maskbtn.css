@@ -1,0 +1,4 @@
+.btnRound{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:10px;position:relative;width:40px;height:40px;border:1px solid #000000;box-sizing:border-box;border-radius:40px;}
+.btnRound-maskGraph{flex:none;order:0;align-self:stretch;flex-grow:1;position:static;height:20px;left:10px;top:10px;}
+.graph{position:absolute;left:0%;right:0%;top:0%;bottom:0%;background:#6FCF97;mix-blend-mode:normal;}
+.color{position:absolute;left:0%;right:0%;top:0%;bottom:0%;background:#000000;}
