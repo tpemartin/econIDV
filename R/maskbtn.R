@@ -48,10 +48,10 @@ roundMaskBtn <- function(type=c("首頁","找人", "找事/物","經濟數據"),
 
   switch(
     type,
-    "首頁"={"/lib/attachment-1/home.svg"},
-    "找人"={"/lib/attachment-1/address.svg"},
-    "找事/物"={"/lib/attachment-1/news.svg"},
-    "經濟數據"={"/lib/attachment-1/graph.svg"}
+    "首頁"={"./lib/attachment-1/home.svg"},
+    "找人"={"./lib/attachment-1/address.svg"},
+    "找事/物"={"./lib/attachment-1/news.svg"},
+    "經濟數據"={"./lib/attachment-1/graph.svg"}
   ) -> imgUrl
 
   # browser()
