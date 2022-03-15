@@ -1,14 +1,4 @@
-@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {
-  html {
-    transform: rotate(-90deg);
-    transform-origin: left top;
-    width: 100vh;
-    overflow-x: hidden;
-    position: absolute;
-    top: 100%;
-    left: 0;
-  }
-}
+
 .page{display:flex;flex-direction:column;align-items:flex-start;padding:0px;height:100vh;background:#FFFFFF;}
 .page-sectionPanel{display:flex;flex-direction:column;align-items:flex-start;padding:30px 20px 20px;flex:none;order:0;align-self:stretch;flex-grow:1;margin:0px 0px;position:static;height:709px;left:0px;top:0px;overflow-y:scroll;}
 .sectionContainer{display:flex;flex-direction:column;align-items:center;padding:0px;flex:none;order:0;align-self:stretch;flex-grow:0;margin:10px 0px;position:static;width:335px;height:943.42px;left:20px;top:30px;}
