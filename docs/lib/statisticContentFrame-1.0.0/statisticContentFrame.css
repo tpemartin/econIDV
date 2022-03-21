@@ -1,0 +1,6 @@
+.bcInMonth{display:flex;flex-direction:row;align-items:center;padding:0px;flex:none;order:2;flex-grow:0;margin:8px 0px;position:static;width:150px;height:28px;left:15px;top:87px;}
+.bcInMonth-time{flex:none;order:0;flex-grow:1;margin:0px 7.5px;position:static;width:121px;height:28px;left:0px;top:0px;font-family:'Roboto';font-style:normal;font-weight:400;font-size:20px;line-height:28px;align-items:flex-end;text-align:right;color:#000000;}
+.bcInMonth-light{display:flex;flex-direction:column;align-items:flex-start;padding:0px;flex:none;order:1;flex-grow:0;margin:0px 7.5px;position:static;width:14px;height:20px;left:136px;top:4px;}
+.bcInMonth-light-lightFrame{display:flex;flex-direction:row;align-items:flex-start;padding:0px;flex:none;order:0;flex-grow:0;margin:0px 0px;position:static;width:14px;height:0px;left:0px;top:0px;}
+.bcInMonth-light-lightFrame-lightImg{flex:none;order:0;flex-grow:0;position:static;width:14px;height:14px;left:0px;top:0px;}
+.bcInMonth-light-ligtbulb{flex:none;order:1;flex-grow:0;margin:0px 0px;position:static;left:0%;right:0%;top:0%;bottom:0%;}

@@ -13,3 +13,8 @@ Description: New Addin Description
 Binding: unload_reload
 Interactive: false
 
+Name: Centralize dependency
+Description: New Addin Description
+Binding: moveAllDepsOut
+Interactive: false
+
