@@ -33,8 +33,10 @@ PlotlyTools <- function(){
     layoutreferenceNames = econIDV::layoutreferenceNames
     layoutreferenceNames[[1]] = "Title and others"
     query_layoutnames = paste0("query_", layoutreferenceNames)
+    layout_urls[[1]] <- "https://plotly.com//r/reference/layout/#layout-title"
     layout_urls |>
       stringr::str_subset("#") -> layout_section_urls
+    # layout_section_urls <- c("https://plotly.com//r/reference/layout/#layout-title", layout_section_urls)
 
     purrr::map(
       seq_along(layout_urls),
