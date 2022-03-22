@@ -25,23 +25,23 @@ dashboardBody_custom <- function(){
     tabItems(
       tabItem(tabName = "business_cycle",
         fluidRow(
-          valueBox(
-            width=2,
-            value=tags$img(
-              src="lib/attachment-1/light_downturn.svg",
-              style="display:block; margin-left:auto;margin-right:auto;", width="50%"
-            ),
-            subtitle=htmltools::HTML("<p style='text-align:center;'>本月信號</p>")
+          column(
+            width=10,
+            box(plt_businessCycle(), width=12)
           ),
           column(
             width=2,
+            valueBox(
+              width=NULL,
+              value=tags$img(
+                src="lib/attachment-1/light_downturn.svg",
+                style="display:block; margin-left:auto;margin-right:auto;", width="50%"
+              ),
+              subtitle=htmltools::HTML("<p style='text-align:center;'>本月信號</p>")),
             econApp:::statisticCard(
               style="margin-top:0px;margin-bottom:15px;"
             )
           )
-        ),
-        fluidRow(
-          box(plt_businessCycle(), width = 8)
         )
       ),
       tabItem(tabName = "widgets",
