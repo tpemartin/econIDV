@@ -4,7 +4,7 @@
 #' @export
 #'
 #' @examples none
-View <- function(){
+ViewDetail <- function(){
   view <- list()
   view$x <- showX
   view$inputs <- function(fn){

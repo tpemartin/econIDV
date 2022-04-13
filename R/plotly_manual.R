@@ -31,6 +31,7 @@ PlotlyTools <- function(){
   pt$query_layout <-{
     layout_urls = econIDV::layout_urls
     layoutreferenceNames = econIDV::layoutreferenceNames
+    layoutreferenceNames[[6]]="Color,modebar,hover,and others"
     layoutreferenceNames[[1]] = "Title and others"
     query_layoutnames = paste0("query_", layoutreferenceNames)
     layout_urls[[1]] <- "https://plotly.com//r/reference/layout/#layout-title"
