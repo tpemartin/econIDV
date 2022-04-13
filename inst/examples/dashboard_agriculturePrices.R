@@ -35,15 +35,15 @@ plt_agPrices <- function(df){
       mapping=aes(
         x=TIME_PERIOD,
         y=Item_VALUE,
-        group=Item2
+        group=Item2,
+        text=paste0("<<",text, ">>")
       )) -> gg0
   ggplotly(gg0) -> ggplt0
+  ggplt0$x$data[[1]]$text |>
+    stringr::str_extract("(?<=<<)[^<>]+(?=>>)") -> ggplt0$x$data[[1]]$text
 
-  if(crosstalk::is.SharedData(df)) df=df$data()
   ggplt0 |>
     plotly::style(
-      text=glue::glue("{df$Item2}\n
-          {lubridate::year(df$TIME_PERIOD)}年{lubridate::month(df$TIME_PERIOD)}月"),
       hoverinfo="text"
     ) |>
   plotly::layout(

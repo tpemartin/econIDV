@@ -66,7 +66,8 @@ prepare_agProductDataFrame <- get_agProductDataFrame <- function(xml) {
   df_agPrices |>
     dplyr::mutate(
       month=lubridate::month(TIME_PERIOD),
-      year=lubridate::year(TIME_PERIOD)
+      year=lubridate::year(TIME_PERIOD),
+      text=glue::glue("{Item2}, {month}月")
     ) -> df_agPrices
   df_agPrices
 }
