@@ -43,7 +43,7 @@ generate_example <- function(Rscripts) {
   ex$Rscripts <- RscriptPaths
   RscriptPaths |>
     purrr::walk(
-      source, local=ex
+      source, local=ex, encoding="UTF-8"
     )
   return(ex)
 }
