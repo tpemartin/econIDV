@@ -1,4 +1,4 @@
-footer_dependency <- function(){
+footer_dependency = function(){
   htmltools::htmlDependency(
     name="footer",
     version="1.0.0",
