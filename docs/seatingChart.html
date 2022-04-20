@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<script src="lib/jquery-3.5.1/jquery.min.js"></script>
+<link href="lib/selectize-0.12.4/css/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="lib/selectize-0.12.4/js/selectize.min.js"></script>
+<link href="lib/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="lib/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<script src="lib/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="lib/plotly-binding-4.10.0/plotly.js"></script>
+<script src="lib/typedarray-0.1/typedarray.min.js"></script>
+<link href="lib/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="lib/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-grid-3.4.1/bootstrap-grid.min.css" rel="stylesheet" />
+
+</head>
+<body>
+<div class="container-fluid crosstalk-bscols">
+  <div class="row">
+    <div class="col-xs-3">
+      <div id="input_name" class="form-group crosstalk-input-select crosstalk-input">
+        <label class="control-label" for="input_name">你的名字</label>
+        <div>
+          <select multiple></select>
+          <script type="application/json" data-for="input_name">{
+  "items": {
+    "value": ["al-Akhter, Nabeeh", "al-Sader, Sad", "Anderson, Jessica", "Angulo Bojorquez, Khrystyne", "Bowyer, Galen", "Boyce, Jennifer", "Brockelman, Ryleigh", "Dillin, Andrew", "el-Allam, Faatih", "el-Nawaz, Taariq", "el-Shabazz, Saara", "Fletcher, Elizabeth", "Garcia, Holly", "Lankhardt, Cynthia", "Larson, Thomas", "Lattimer, Marisa", "Lewis, Kathryn", "Little, Teodor", "Marks, Marcos", "Mollard, Asako", "Parris, Briana", "Radtke, Emma", "Swain, Marquis", "Thomas, Kiatlin", "Thompson, Jowan", "Trinh, Jason", "Ursery, Morgan", "Wilson, Karin", "Yarbrough-Smith, Dae Vondrae", "Zaenger, Daniel"],
+    "label": ["al-Akhter, Nabeeh", "al-Sader, Sad", "Anderson, Jessica", "Angulo Bojorquez, Khrystyne", "Bowyer, Galen", "Boyce, Jennifer", "Brockelman, Ryleigh", "Dillin, Andrew", "el-Allam, Faatih", "el-Nawaz, Taariq", "el-Shabazz, Saara", "Fletcher, Elizabeth", "Garcia, Holly", "Lankhardt, Cynthia", "Larson, Thomas", "Lattimer, Marisa", "Lewis, Kathryn", "Little, Teodor", "Marks, Marcos", "Mollard, Asako", "Parris, Briana", "Radtke, Emma", "Swain, Marquis", "Thomas, Kiatlin", "Thompson, Jowan", "Trinh, Jason", "Ursery, Morgan", "Wilson, Karin", "Yarbrough-Smith, Dae Vondrae", "Zaenger, Daniel"]
+  },
+  "map": {
+    "al-Akhter, Nabeeh": ["5"],
+    "al-Sader, Sad": ["10"],
+    "Anderson, Jessica": ["24"],
+    "Angulo Bojorquez, Khrystyne": ["6"],
+    "Bowyer, Galen": ["1"],
+    "Boyce, Jennifer": ["16"],
+    "Brockelman, Ryleigh": ["15"],
+    "Dillin, Andrew": ["7"],
+    "el-Allam, Faatih": ["26"],
+    "el-Nawaz, Taariq": ["21"],
+    "el-Shabazz, Saara": ["17"],
+    "Fletcher, Elizabeth": ["18"],
+    "Garcia, Holly": ["19"],
+    "Lankhardt, Cynthia": ["22"],
+    "Larson, Thomas": ["29"],
+    "Lattimer, Marisa": ["23"],
+    "Lewis, Kathryn": ["30"],
+    "Little, Teodor": ["2"],
+    "Marks, Marcos": ["27"],
+    "Mollard, Asako": ["25"],
+    "Parris, Briana": ["13"],
+    "Radtke, Emma": ["8"],
+    "Swain, Marquis": ["14"],
+    "Thomas, Kiatlin": ["11"],
+    "Thompson, Jowan": ["9"],
+    "Trinh, Jason": ["20"],
+    "Ursery, Morgan": ["4"],
+    "Wilson, Karin": ["3"],
+    "Yarbrough-Smith, Dae Vondrae": ["12"],
+    "Zaenger, Daniel": ["28"]
+  },
+  "group": ["SharedDatad0ffd12a"]
+}</script>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-9">
+      <div>
+        <div style="position:absolute">
+          <div id="htmlwidget-bf15fbac3a31b60a223a" style="width:100%;height:400px;" class="plotly html-widget"></div>
+          <script type="application/json" data-for="htmlwidget-bf15fbac3a31b60a223a">{"x":{"data":[{"x":[1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5],"y":[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,6,6,6,6,6],"text":["x: A<br />y: 1","x: B<br />y: 1","x: C<br />y: 1","x: D<br />y: 1","x: E<br />y: 1","x: A<br />y: 2","x: B<br />y: 2","x: C<br />y: 2","x: D<br />y: 2","x: E<br />y: 2","x: A<br />y: 3","x: B<br />y: 3","x: C<br />y: 3","x: D<br />y: 3","x: E<br />y: 3","x: A<br />y: 4","x: B<br />y: 4","x: C<br />y: 4","x: D<br />y: 4","x: E<br />y: 4","x: A<br />y: 5","x: B<br />y: 5","x: C<br />y: 5","x: D<br />y: 5","x: E<br />y: 5","x: A<br />y: 6","x: B<br />y: 6","x: C<br />y: 6","x: D<br />y: 6","x: E<br />y: 6"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":56.6929133858268,"symbol":"square-open","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":25.5940589091274,"r":7.30593607305936,"b":39.5483968086708,"l":31.4155251141553},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,5.6],"tickmode":"array","ticktext":["A","B","C","D","E"],"tickvals":[1,2,3,4,5],"categoryorder":"array","categoryarray":["A","B","C","D","E"],"nticks":[],"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":0,"showline":false,"linecolor":"rgba(0, 0, 0, 1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":[],"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"<br>","font":{"color":"rgba(0, 0, 0, 1)","family":"","size":14.6118721461187}},"hoverformat":".2f","side":"top","mirror":"ticks"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.2,6.5],"tickmode":"linear","ticktext":["2","4","6"],"tickvals":[2,4,6],"categoryorder":"array","categoryarray":["2","4","6"],"nticks":[],"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":0,"showline":false,"linecolor":"rgba(0, 0, 0, 1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":[],"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"<br>","font":{"color":"rgba(0, 0, 0, 1)","family":"","size":14.6118721461187}},"hoverformat":".2f","mirror":"ticks"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative","height":800},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"3c9e780214a1":{"x":{},"y":{},"type":"scatter"}},"cur_data":"3c9e780214a1","visdat":{"3c9e780214a1":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+        </div>
+        <div style="position:absolute">
+          <div id="htmlwidget-65be52d195c09b2eadf5" style="width:100%;height:400px;" class="plotly html-widget"></div>
+          <script type="application/json" data-for="htmlwidget-65be52d195c09b2eadf5">{"x":{"data":[{"x":[1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5],"y":[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,6,6,6,6,6],"text":["x: A<br />y: 1<br />Bowyer, Galen","x: B<br />y: 1<br />Little, Teodor","x: C<br />y: 1<br />Wilson, Karin","x: D<br />y: 1<br />Ursery, Morgan","x: E<br />y: 1<br />al-Akhter, Nabeeh","x: A<br />y: 2<br />Angulo Bojorquez, Khrystyne","x: B<br />y: 2<br />Dillin, Andrew","x: C<br />y: 2<br />Radtke, Emma","x: D<br />y: 2<br />Thompson, Jowan","x: E<br />y: 2<br />al-Sader, Sad","x: A<br />y: 3<br />Thomas, Kiatlin","x: B<br />y: 3<br />Yarbrough-Smith, Dae Vondrae","x: C<br />y: 3<br />Parris, Briana","x: D<br />y: 3<br />Swain, Marquis","x: E<br />y: 3<br />Brockelman, Ryleigh","x: A<br />y: 4<br />Boyce, Jennifer","x: B<br />y: 4<br />el-Shabazz, Saara","x: C<br />y: 4<br />Fletcher, Elizabeth","x: D<br />y: 4<br />Garcia, Holly","x: E<br />y: 4<br />Trinh, Jason","x: A<br />y: 5<br />el-Nawaz, Taariq","x: B<br />y: 5<br />Lankhardt, Cynthia","x: C<br />y: 5<br />Lattimer, Marisa","x: D<br />y: 5<br />Anderson, Jessica","x: E<br />y: 5<br />Mollard, Asako","x: A<br />y: 6<br />el-Allam, Faatih","x: B<br />y: 6<br />Marks, Marcos","x: C<br />y: 6<br />Zaenger, Daniel","x: D<br />y: 6<br />Larson, Thomas","x: E<br />y: 6<br />Lewis, Kathryn"],"key":["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(255,0,0,1)","opacity":1,"size":22.6771653543307,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(255,0,0,1)"}},"hoveron":"points","set":"SharedDatad0ffd12a","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null}],"layout":{"margin":{"t":25.5940589091274,"r":7.30593607305936,"b":39.5483968086708,"l":31.4155251141553},"plot_bgcolor":"transparent","paper_bgcolor":"transparent","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,5.6],"tickmode":"array","ticktext":["A","B","C","D","E"],"tickvals":[1,2,3,4,5],"categoryorder":"array","categoryarray":["A","B","C","D","E"],"nticks":[],"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":0,"showline":false,"linecolor":"rgba(0, 0, 0, 1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":[],"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"<br>","font":{"color":"rgba(0, 0, 0, 1)","family":"","size":14.6118721461187}},"hoverformat":".2f","side":"top","mirror":"ticks"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.2,6.5],"tickmode":"linear","ticktext":["2","4","6"],"tickvals":[2,4,6],"categoryorder":"array","categoryarray":["2","4","6"],"nticks":[],"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":0,"showline":false,"linecolor":"rgba(0, 0, 0, 1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":[],"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"<br>","font":{"color":"rgba(0, 0, 0, 1)","family":"","size":14.6118721461187}},"hoverformat":".2f","mirror":"ticks"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative","height":800,"dragmode":"zoom"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"3c9e19646cfa":{"x":{},"y":{},"text":{},"type":"scatter"}},"cur_data":"3c9e19646cfa","visdat":{"3c9e19646cfa":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0,"ctGroups":["SharedDatad0ffd12a"]},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
