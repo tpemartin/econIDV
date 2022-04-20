@@ -23,6 +23,21 @@ Examples <- function(){
     ) ->
       list_ex$agricultureProductPricesEnv
   }
+  list_ex$traffic_accident <- function(){
+    generate_example(
+      Rscripts = c(
+        "examples/traffic_accident.R"
+      ))->
+        list_ex$traffic_accident_env
+  }
+
+  list_ex$seatingChart <- function(){
+    generate_example(
+      Rscripts = c(
+        "examples/seatingChart.R"
+      ))->
+      list_ex$seatingChart_env
+  }
 
   return(list_ex)
 }

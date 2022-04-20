@@ -1,0 +1,304 @@
+{
+    "data": [
+        {
+            "meta": {
+                "columnNames": {
+                    "x": "data.1.x",
+                    "y": "data.1.y",
+                    "text": "data.1.text"
+                }
+            },
+            "mode": "markers",
+            "type": "scatter",
+            "xsrc": "tpemartin:164:af2183",
+            "x": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                1,
+                2,
+                3,
+                4,
+                5,
+                1,
+                2,
+                3,
+                4,
+                5,
+                1,
+                2,
+                3,
+                4,
+                5,
+                1,
+                2,
+                3,
+                4,
+                5,
+                1,
+                2,
+                3,
+                4,
+                5
+            ],
+            "ysrc": "tpemartin:164:d45261",
+            "y": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                2,
+                2,
+                2,
+                2,
+                2,
+                3,
+                3,
+                3,
+                3,
+                3,
+                4,
+                4,
+                4,
+                4,
+                4,
+                5,
+                5,
+                5,
+                5,
+                5,
+                6,
+                6,
+                6,
+                6,
+                6
+            ],
+            "frame": null,
+            "xaxis": "x",
+            "yaxis": "y",
+            "marker": {
+                "line": {
+                    "color": "rgba(0, 0, 0, 1)",
+                    "width": 1.88976377952756
+                },
+                "size": 56.6929133858268,
+                "color": "rgba(0, 0, 0, 1)",
+                "symbol": "square-open",
+                "opacity": 1,
+                "autocolorscale": false
+            },
+            "hoveron": "points",
+            "textsrc": "tpemartin:164:1cd766",
+            "text": [
+                "x: A<br />y: 1",
+                "x: B<br />y: 1",
+                "x: C<br />y: 1",
+                "x: D<br />y: 1",
+                "x: E<br />y: 1",
+                "x: A<br />y: 2",
+                "x: B<br />y: 2",
+                "x: C<br />y: 2",
+                "x: D<br />y: 2",
+                "x: E<br />y: 2",
+                "x: A<br />y: 3",
+                "x: B<br />y: 3",
+                "x: C<br />y: 3",
+                "x: D<br />y: 3",
+                "x: E<br />y: 3",
+                "x: A<br />y: 4",
+                "x: B<br />y: 4",
+                "x: C<br />y: 4",
+                "x: D<br />y: 4",
+                "x: E<br />y: 4",
+                "x: A<br />y: 5",
+                "x: B<br />y: 5",
+                "x: C<br />y: 5",
+                "x: D<br />y: 5",
+                "x: E<br />y: 5",
+                "x: A<br />y: 6",
+                "x: B<br />y: 6",
+                "x: C<br />y: 6",
+                "x: D<br />y: 6",
+                "x: E<br />y: 6"
+            ],
+            "hoverinfo": "text",
+            "showlegend": false
+        }
+    ],
+    "layout": {
+        "font": {
+            "size": 14.6118721461187,
+            "color": "rgba(0, 0, 0, 1)",
+            "family": ""
+        },
+        "xaxis": {
+            "side": "top",
+            "type": "linear",
+            "range": [
+                0.4,
+                5.6
+            ],
+            "ticks": "outside",
+            "title": {
+                "font": {
+                    "size": 14.6118721461187,
+                    "color": "rgba(0, 0, 0, 1)",
+                    "family": ""
+                },
+                "text": "<br>"
+            },
+            "anchor": "y",
+            "domain": [
+                0,
+                1
+            ],
+            "mirror": "ticks",
+            "nticks": null,
+            "ticklen": 3.65296803652968,
+            "showgrid": false,
+            "showline": false,
+            "tickfont": {
+                "size": 11.689497716895,
+                "color": "rgba(77,77,77,1)",
+                "family": ""
+            },
+            "tickmode": "array",
+            "ticktext": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E"
+            ],
+            "tickvals": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ],
+            "zeroline": false,
+            "autorange": false,
+            "gridcolor": null,
+            "gridwidth": 0,
+            "linecolor": "rgba(0, 0, 0, 1)",
+            "linewidth": 0.66417600664176,
+            "tickangle": 0,
+            "tickcolor": "rgba(51,51,51,1)",
+            "tickwidth": 0.66417600664176,
+            "automargin": true,
+            "hoverformat": ".2f",
+            "categoryarray": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E"
+            ],
+            "categoryorder": "array",
+            "showticklabels": true
+        },
+        "yaxis": {
+            "type": "linear",
+            "range": [
+                0.2,
+                6.5
+            ],
+            "ticks": "outside",
+            "title": {
+                "font": {
+                    "size": 14.6118721461187,
+                    "color": "rgba(0, 0, 0, 1)",
+                    "family": ""
+                },
+                "text": "<br>"
+            },
+            "anchor": "x",
+            "domain": [
+                0,
+                1
+            ],
+            "mirror": "ticks",
+            "nticks": null,
+            "ticklen": 3.65296803652968,
+            "showgrid": false,
+            "showline": false,
+            "tickfont": {
+                "size": 11.689497716895,
+                "color": "rgba(77,77,77,1)",
+                "family": ""
+            },
+            "tickmode": "linear",
+            "ticktext": [
+                "2",
+                "4",
+                "6"
+            ],
+            "tickvals": [
+                2,
+                4,
+                6
+            ],
+            "zeroline": false,
+            "autorange": false,
+            "gridcolor": null,
+            "gridwidth": 0,
+            "linecolor": "rgba(0, 0, 0, 1)",
+            "linewidth": 0.66417600664176,
+            "tickangle": 0,
+            "tickcolor": "rgba(51,51,51,1)",
+            "tickwidth": 0.66417600664176,
+            "automargin": true,
+            "hoverformat": ".2f",
+            "categoryarray": [
+                "2",
+                "4",
+                "6"
+            ],
+            "categoryorder": "array",
+            "showticklabels": true
+        },
+        "legend": {
+            "font": {
+                "size": 11.689497716895,
+                "color": "rgba(0, 0, 0, 1)",
+                "family": ""
+            },
+            "bgcolor": "rgba(255,255,255,1)",
+            "bordercolor": "transparent",
+            "borderwidth": 1.88976377952756
+        },
+        "margin": {
+            "b": 42.0294266869609,
+            "l": 31.4155251141553,
+            "r": 7.30593607305936,
+            "t": 28.0750887874176
+        },
+        "shapes": [
+            {
+                "x0": 0,
+                "x1": 1,
+                "y0": 0,
+                "y1": 1,
+                "line": {
+                    "color": null,
+                    "width": 0,
+                    "linetype": []
+                },
+                "type": "rect",
+                "xref": "paper",
+                "yref": "paper",
+                "fillcolor": null
+            }
+        ],
+        "barmode": "relative",
+        "hovermode": "closest",
+        "showlegend": false,
+        "plot_bgcolor": "rgba(255,255,255,1)",
+        "paper_bgcolor": "rgba(255,255,255,1)"
+    },
+    "frames": []
+}
