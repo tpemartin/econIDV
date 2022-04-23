@@ -38,6 +38,13 @@ Examples <- function(){
       ))->
       list_ex$seatingChart_env
   }
+  list_ex$income_substitution_effect <- function(){
+    generate_example(
+      Rscripts = c(
+        "examples/income-substitution-effects.R"
+      )
+    ) -> list_ex$income_substitution_effect_env
+  }
 
   return(list_ex)
 }
