@@ -67,7 +67,7 @@ prepare_agProductDataFrame <- get_agProductDataFrame <- function(xml) {
   df_agPrices$Item |>
     stringr::str_extract(
       # "19其他肉類製品(火腿、臘肉、肉類罐頭等)(民國105年=100)",
-      "(?<=[0-9]{1,2}).*(?=\\(民國)"
+      "(?<=[0-9]{1,3})[^0-9]*(?=\\(民國)"
     ) -> df_agPrices$Item2
 
   df_agPrices |>
