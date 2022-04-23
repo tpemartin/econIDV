@@ -116,7 +116,7 @@ dashboard_agPrices <- function(...){
     dashboardBody(
       tabItems(
         tabItem(tabName = "plt0",
-          box(plt0)
+          shinydashboard::box(plt0)
           ),
         tabItem(tabName = "plt_highlight",
           box_highlight[[1]],
