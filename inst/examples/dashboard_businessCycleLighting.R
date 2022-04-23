@@ -27,7 +27,7 @@ dashboardBody_custom <- function(){
         fluidRow(
           column(
             width=10,
-            box(plt_businessCycle(), width=12)
+            shinydashboard::box(plt_businessCycle(), width=12)
           ),
           column(
             width=2,
