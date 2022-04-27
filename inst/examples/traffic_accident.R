@@ -43,6 +43,9 @@ download_traffic_data=function(){
   traffic$縣市 = stringr::str_sub(.city_town, 1,3)
   traffic$區鄉鎮市 = stringr::str_sub(.city_town, 4)
 
+  glue::glue("https://www.google.com/maps/search/?api=1&query={traffic$緯度},{traffic$經度}") ->
+    traffic$googleMap
+
   traffic -> .GlobalEnv$traffic
   message("Data frame traffic is created in the global environment.")
 }
@@ -88,6 +91,78 @@ map_traffic2 <- function(trafficData) {
     )
 } #|> econIDV::showWidget()
 
+map_traffic <- function(trafficData) {
+  library(leaflet)
+  leaflet(data=trafficData, height="700px") |>
+    setView(
+      lat=23.8389,
+      lng = 120.6217,
+      zoom=8
+    ) |>
+    addTiles() |>
+    addMarkers(
+      lng=~as.numeric(經度),
+      lat=~as.numeric(緯度)#,
+      # clusterOptions = markerClusterOptions()
+    )
+} #|> econIDV::showWidget()
+dayNight_iconMarkers <- function(){
+  require(leaflet)
+  dayNightIcons <- iconList(
+    day = makeIcon(
+      iconUrl=system.file("html/img/sun.svg",package="econIDV"), iconWidth=17, iconHeight=17),
+    night = makeIcon(
+      iconUrl=system.file("html/img/moon.svg",package="econIDV"), iconWidth=17, iconHeight=17)
+  )
+}
+add_dayNight <- function(trafficData) {
+  pickDay <- (trafficData$hour >= 6 &
+      trafficData$hour < 18)
+  dayNight=dplyr::if_else(
+    pickDay,
+    "day","night"
+  )
+}
+create_iconType <- function(trafficData) {
+  trafficData$dayNight = add_dayNight(trafficData)
+  trafficData$iconType=
+    dayNight_iconMarkers()[trafficData$dayNight]
+  trafficData
+}
+add_popupText = function(traffic){
+  traffic$popup = purrr::map_chr(
+    1:nrow(traffic),
+    ~{
+      traffic[.x, ] |>
+        get_trafficPopupAsString()
+    }
+  )
+  return(traffic)
+}
+get_trafficPopupAsString = function(trafficX){
+  tag_trafficPopup(trafficX) |> as.character()
+}
+map_traffic_withDayNight <- function(trafficData) {
+  library(leaflet)
+  # trafficData=traffic
+
+  leaflet(data=trafficData) |>
+    setView(
+      lat=23.8389,
+      lng = 120.6217,
+      zoom=7
+    ) |>
+    addTiles() |>
+    addMarkers(
+      lng=~as.numeric(經度),
+      lat=~as.numeric(緯度),
+      icon=~iconType,
+      popup =~popup
+    ) |>
+    htmltools::tagList(
+      geoPopup_dependency()
+    )
+}
 show_datatable <- function(traffic){
   DT::datatable(
     traffic
@@ -118,4 +193,8 @@ plot_histogram = function(traffic){
     ggplotly(gg0)
 }
 
-
+traffic_example = function(){
+  .GlobalEnv$examples=Examples()
+  examples$traffic_accident()
+  examples$traffic_accident_env$attach()
+}

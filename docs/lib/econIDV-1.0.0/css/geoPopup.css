@@ -1,0 +1,7 @@
+.geoCard{display:flex;flex-direction:column;align-items:flex-start;padding:3px 0px 3px 7px;position:relative;width:96px;height:125px;background:#FFFFFF;border:0.3px solid #000000;box-sizing:border-box;border-radius:13px;}
+.geoCard-time{display:flex;flex-direction:column;align-items:flex-start;padding:0px;flex:none;order:0;flex-grow:0;margin:1.5px 0px;position:static;width:69px;height:39px;left:7px;top:3px;}
+.geoCard-time-date{flex:none;order:0;flex-grow:0;margin:9px 0px;position:static;width:69px;height:15px;left:0px;top:0px;font-family:'Inter';font-style:normal;font-weight:400;font-size:12px;line-height:15px;color:#000000;}
+.geoCard-time-time{flex:none;order:1;flex-grow:0;margin:9px 0px;position:static;width:32px;height:15px;left:0px;top:24px;font-family:'Inter';font-style:normal;font-weight:400;font-size:12px;line-height:15px;color:#000000;}
+.geoCard-buttonMap{flex:none;order:1;flex-grow:0;margin:1.5px 0px;position:relative;width:24px;height:24px;left:7px;top:45px;border:0.3px solid #000000;box-sizing:border-box;border-radius:40px;}
+.Vector{position:absolute;left:37.5%;right:37.5%;top:18.75%;bottom:34.38%;background:#000000;}
+.Vector1{position:absolute;left:18.75%;right:18.75%;top:45.51%;bottom:18.75%;background:#000000;}
