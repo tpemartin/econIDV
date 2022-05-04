@@ -45,7 +45,13 @@ Examples <- function(){
       )
     ) -> list_ex$income_substitution_effect_env
   }
-
+  list_ex$election <- function(){
+    generate_example(
+      Rscripts = c(
+        "examples/election.R"
+      )
+    ) -> list_ex$election_env
+  }
   return(list_ex)
 }
 
