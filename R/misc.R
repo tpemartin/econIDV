@@ -1,3 +1,16 @@
+#' From a character of colname, generate its I(objectName) expression in quo
+#'
+#' @param colname a character of variable name, such as "y2012".
+#'
+#' @return its quo(I(y2012))
+#' @export
+#'
+#' @examples none.
+quo_as.is <- function(colname){
+  vname=as.name("y2012")
+  quo_asIs=rlang::quo(I(!!vname))
+  quo_asIs
+}
 remove_unwanted <- function(){
   allObjects <- ls(envir=.GlobalEnv)
   purrr::map_lgl(
