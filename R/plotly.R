@@ -1,3 +1,110 @@
+#' Get ranked split names
+#'
+#' @param .plot a plotly plot
+#'
+#' @return
+#' @export
+#'
+#' @examples none.
+get_ranked_splitNames <- function(.plot) {
+  splitNames=purrr::map_chr(
+    seq_along(.plot$x$data),~.plot$x$data[[.x]]$name)
+  splitNames
+}
+
+#' Add legend group titles based on ranked split names
+#'
+#' @param .plot a plotly plot
+#' @param from a starting character number for extracting group titles from get_ranked_splitNames(.plot)
+#' @param to a ending character number for extracting group titles from get_ranked_splitNames(.plot)
+#'
+#' @return
+#' @export
+#'
+#' @examples none.
+style_groupTitles_basedOnRankedSplitNames <- function(.plot, from, to) {
+  .plot |>
+    get_ranked_splitNames() -> ranked_splits
+
+  groupNames = stringr::str_sub(ranked_splits,from,to)
+  groupNames = factor(groupNames)
+  groupNameLevels=levels(groupNames)
+  purrr::map(
+    seq_along(levels(groupNames)),
+    ~{
+      function(p){
+        plotly::style(
+          p,
+          legendgrouptitle=list(text=groupNameLevels[[.x]]),
+          traces=which(groupNames==groupNames[[.x]])
+        )
+      }
+    }
+  ) -> styleFns
+  p=.plot
+  for(.x in seq_along(styleFns)){
+    p=styleFns[[.x]](p)
+  }
+  p
+}
+#' Create legend for diverging bins representing two parties.
+#'
+#' @param list_pal a named list of equal-length color vectors. Each vector consists of color codes. And the name of the vector represents the party name.
+#' @param labels a character vector for labeling colors, should have the same length as any one color vector in `list_pal`
+#' @param title title for the legend
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' colorspace::diverging_hcl(n = 10, h = c(245, 120), c = c(31, 100), l = c(30, 100), power = c(1, 1.3), register = "kmt-dpp") -> pal
+#' list_pal = list(
+#'   "國民黨"=rev(pal[1:5]),
+#'   "民進黨"=pal[6:10]
+#' )
+#' labels=c("0-50","50-55","55-60","60-65","65-100%")
+#'
+#' legend_divergingBins(list_pal, labels, title=NULL)
+legend_divergingBins <- function(list_pal, labels, title=NULL, width=200) {
+  x=seq_along(list_pal[[1]])
+  y=1:length(list_pal)
+  expand.grid(x,y) |>
+    setNames(c("x","y")) -> df
+  df$fill=unlist(list_pal)
+  groupnames=names(list_pal)
+  asp=length(unique(df$y))/length(unique(df$x))*1.2
+  ggplot(df, aes(x, y)) +
+    geom_tile(aes(fill = I(fill)),width=0.9, height=0.9)+
+    theme_classic()+
+    theme(
+      aspect.ratio = asp,
+      axis.line=element_blank(),
+      axis.ticks=element_blank(),
+      axis.title = element_blank()
+    )+
+    scale_x_continuous(
+      breaks=x,
+      labels=labels
+    )+
+    scale_y_continuous(
+      breaks=y,
+      labels=groupnames
+    ) -> gg
+  plotly::ggplotly(gg, width=width,height=width*asp) |>
+    plotly::layout(showlegend=F,
+      title=list(
+        text=title,
+        font=list(size=10)
+      ),
+      xaxis=list(tickfont=list(size=6)),
+      yaxis=list(tickfont=list(size=9))) |>
+    plotly::config(
+      # displayModeBar=F,
+      # responsive=F,
+      # scrollZoom = F,
+      staticPlot=T
+    )
+}
 #' Convert 6 digit hex color into a statement of "rgba(r, g, b, a)"
 #'
 #' @param hexcolor a character vector of 6 digits hex

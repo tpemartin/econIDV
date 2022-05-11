@@ -1,3 +1,85 @@
+#' Generate diverging two party discrete color guide
+#'
+#' @param parties a list of two characters
+#' @param colorcodes a list of two character vectors with equal length. Each element value represents the discrete colors of a party
+#' @param numbers the cut numbers. If each party has 5 colors, then there will be 6 cut numbers.
+#'
+#' @return a html tag
+#' @export
+#'
+#' @examples
+guide_color2 = function(parties, colorcodes, numbers){
+  .colorBar1 <- colorBar(numbers, colorcodes[[1]])
+  .colorBar2 <- colorBar2(colorcodes[[2]])
+  div(
+    guide(parties[[1]], .colorBar1,
+      .css=css("margin-top"="15px")),
+    guide(parties[[2]], .colorBar2)
+  )
+}
+guideColor_dependency = function(){
+  htmlDependency(
+    name="guideColor",
+    version="1.0.0",
+    src=c(file=system.file("html/css", package="econIDV")),
+    style="guide_color.css"
+  )
+}
+colorBar2 = function(colorcodes){
+  purrr::map(colorcodes,
+    ~{
+      tagList(
+        colorItem(.x))}) ->
+    list_colorItems
+  do.call(colorbarMethod2, list_colorItems) |>
+    tagList(
+      guideColor_dependency()
+    )
+}
+colorBar = function(numbers, colorcodes){
+  nNumber=length(numbers)
+  lastNumber = numbers[[nNumber]]
+  numbers=numbers[1:(nNumber-1)]
+  purrr::map2(numbers,colorcodes,
+    ~{
+      tagList(
+        tickItem(.x),
+        colorItem(.y))}) -> list_colors
+  append(list_colors,
+    list(
+      tickItem(lastNumber)
+    ))->
+    list_colorItems
+  do.call(colorbarMethod, list_colorItems) |>
+    tagList(
+      guideColor_dependency()
+    )
+}
+tickItem = function(number){
+  div(class="tick",
+    div(class="tickNumber", number))
+}
+colorItem = function(colorcode){
+  .css=css("background-color"=colorcode)
+  div(class="colorItem", style=.css)
+}
+
+colorbarMethod = function(...){
+  require(htmltools)
+  div(class="colorbar", ...)
+}
+colorbarMethod2 = function(...){
+  require(htmltools)
+  div(class="colorbar2", ...)
+}
+guide = function(party, .colorBar, .css=NULL){
+  div(class="guide",
+    div(class="guideText",
+      style=.css, party),
+    .colorBar)
+}
+
+
 
 fig_import <- function(econWeb, Fig) {
   fig = econWeb::Fig()

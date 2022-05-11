@@ -1,0 +1,261 @@
+
+## Presidential elections
+
+
+```{r}
+examples=econIDV::Examples()
+examples$election()
+examples$election_env$attach()
+```
+
+### data preparation
+
+```{r}
+download_electionData()
+# prepare choropleth map data
+elections |>
+  prepare_choroplethMapData() -> df_elections
+df_elections |>
+  prepare_fillColorByYears_data() -> df_elections_wider
+
+# prepare datatable data
+df_elections |>
+  prepare_dataTableData() -> df_4dataTable_wide
+```
+
+### create sf 
+
+```{r}
+df_elections_wider |>
+  as.data.frame() |> # to remove tibble class for row.names assignment
+  create_sf() |>
+  # 移除geometry空的資料, 否則ggplotly會有錯誤
+  econIDV::remove_emptyGeometry() ->
+  sf_elections_wider
+```
+
+<div class="alert alert-danger">
+If `class(df_elections_wider)` has tibble class (i.e. tbl class), we won't be able to change row.names. Remove tibble class is necessary for the later sharedData creation.
+
+If you are to use plotly to graph sf data, make sure there is no entry that has empty geometry.
+
+</div>
+
+### ggplot to plotly
+
+```{r}
+class(sf_elections_wider$y2012)
+# is factor
+```
+
+```{r}
+ggplot(data=sf_elections_wider)+theme_void() -> base
+# as.is operator I(.) does not work as fill want, it would be come numeric unless as.character in advance.
+list_gg=vector("list", 3)
+base+
+  geom_sf(
+    aes(fill=I(as.character(y2012))),
+    color="#828282", size=0.1) -> list_gg[[1]]
+base+
+  geom_sf(
+    aes(fill=I(as.character(y2016))),
+    color="#828282", size=0.1) -> list_gg[[2]]
+base+
+  geom_sf(
+    aes(fill=I(as.character(y2020))),
+    color="#828282", size=0.1) -> list_gg[[3]]
+
+list_gg |> purrr::map(plotly::ggplotly) -> 
+  list_ggplt
+do.call(plotly::subplot, list_ggplt) -> plt0
+# equivalent to `plotly::subplot(list_ggplt[[1]], list_ggplt[[2]], list_ggplt[[3]])`
+
+plt0 |>
+  plotly::layout(
+    showlegend=F
+  )
+```
+
+<div class="alert alert-info">
+`I(.)` is an **as.is** operator, which prevent the function from changing its class. If there is no such change in the function, there is no effect from that. When using `I(.)` for fill aesthetics in ggplot or plotly, it will normally change the class to factor, then color according to factor attribute which is based on the type of the vector. When using `I(.)` with a character vector, the character values will be preserved for color interpretation. 
+</div>
+
+
+### direct plotly
+
+```{r}
+sf_elections_wider$y2012 
+sf_elections_wider$y2012color = sf_elections_wider$y2012
+levels(sf_elections_wider$y2012color) <- levels(df_elections$取色得票率區間)
+sf_elections_wider$y2012color
+```
+
+```{r}
+df_elections$取色得票率區間->
+  df_elections$得票率區間
+levels(df_elections$得票率區間) |>
+  stringr::str_extract_all("[0-9]+") -> intervals
+.x=1
+purrr::map_chr(
+  seq_along(intervals),
+  ~{
+    intervals[[.x]] |> 
+    as.numeric() -> numberX
+  paste0(min(numberX),"-",max(numberX),"%")
+  }
+) -> levelLabels
+levels(sf_elections_wider$y2012color) <- levelLabels
+sf_elections_wider$y2012color
+sf_elections_wider$y2012
+```
+
+```{r}
+plotly::plot_ly() |>
+  plotly::add_sf(
+    # name="2012",
+    data=sf_elections_wider,
+    split=~地區,
+    color=~I(as.character(y2012)),
+    alpha=1
+  ) |>
+  plotly::layout(
+    colorway=
+  )
+```
+
+
+```{r}
+list_plt = vector("list", 3 )
+plotly::plot_ly() |>
+  plotly::add_sf(
+    # name="2012",
+    data=sf_elections_wider,
+    split=~地區,
+    color=~I(as.character(y2012)),
+    alpha=1
+  ) |>
+  plotly::layout(
+    xaxis=list(
+      title=list(
+        text="2012"
+      )
+    )
+  )-> list_plt[[1]]
+list_plt[[1]]
+plotly::plot_ly() |>
+  plotly::add_sf(
+    data=sf_elections_wider,
+    split=~地區,
+    color=~I(as.character(y2016)),
+    alpha=1
+  ) |>
+  plotly::layout(
+    xaxis=list(
+      title=list(
+        text="2016"
+      )
+    )
+  ) -> list_plt[[2]]
+plotly::plot_ly() |>
+  plotly::add_sf(
+    data=sf_elections_wider,
+    split=~地區,
+    color=~I(as.character(y2020)),
+    alpha=1
+  ) |>
+  plotly::layout(
+    xaxis=list(
+      title=list(
+        text="2020"
+      )
+    )
+  ) -> list_plt[[3]]
+
+plotly::subplot(
+  list_plt[[1]], list_plt[[2]], list_plt[[3]],
+  titleX = T
+) |> 
+  plotly::style(
+    line=list(
+      width=0.2,
+      color="#828282"
+    )
+  ) |> 
+  plotly::layout(
+    showlegend=F
+  ) |>
+  plotly::config(
+    displayModeBar = FALSE
+  )
+```
+
+
+
+
+### sharedData
+
+row.names consistency
+```{r}
+# make row.names consistent across different to-be-shared data frames
+row.names(df_4dataTable_wide) <- 
+  df_4dataTable_wide$地區
+row.names(sf_elections_wider) <-
+  sf_elections_wider$地區
+
+sharedData_elections_wider = crosstalk::SharedData$new(sf_elections_wider, group="election")
+sharedData_dataTable = crosstalk::SharedData$new(df_4dataTable_wide, group="election")
+```
+
+```{r}
+sharedData_elections_wider |> 
+  directPlotlyPlot()  |>
+  highlight(
+    off="plotly_doubleclick"
+  ) -> widgetPlolty
+sharedData_dataTable |>
+  DT::datatable(
+    escape="地區" #不當HTML看待的欄位
+    ) -> widgetDataTable
+
+ crosstalk::bscols(
+  widths=c(12, 12),
+  widgetPlolty, widgetDataTable
+) -> electionWidget
+ 
+ electionWidget |> econIDV::showWidget()
+```
+
+```{r}
+# undebug(subplot_titles)
+tagList(
+div(style="display:inline-block;width:650px;",
+  subplot_titles(widget=widgetPlolty,
+  titles=c("2012", "2016", "2020"))
+  ),
+div(style="display:inline-block;width:650px;",
+  subplot_titles(widget=widgetPlolty,
+  titles=c("2012", "2016", "2020"),
+    leftpull=6))
+) |> econIDV::showWidget()
+```
+
+
+```{r}
+undebug(subplot_titles)
+subplot_titles(
+  widget=widgetPlolty,
+  titles=c("2012", "2016", "2020"),
+  leftpull=15, rightpull=8) |> 
+  econIDV::showWidget()
+
+```
+
+
+```{r}
+ui_container_labelsOnTop(widgetPlolty) |> econWeb::browseTag2()
+```
+
+```{r,echo=FALSE}
+ 
+htmltools::save_html(electionWidget, "/Users/martinl/Github/econIDV/docs/election.html")
+```

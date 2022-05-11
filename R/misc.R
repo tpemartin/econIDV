@@ -1,3 +1,44 @@
+#' scales::show_col's revision where labels can be text other than color codes.
+#'
+#' @param colours characters of color
+#' @param labels characters of labels
+#'
+#' @return
+#' @export
+#'
+#' @examples none.
+show_col2 = function(colours, labels, label_size=NULL){
+  require(rlang)
+  n <- length(colours)
+  ncol <- ceiling(sqrt(length(colours)))
+  nrow <- ceiling(n/ncol)
+  colours <- c(colours, rep(NA, nrow * ncol - length(colours)))
+  colours <- matrix(colours, ncol = ncol, byrow = TRUE)
+  old <- par(pty = "s", mar = c(0, 0, 0, 0))
+  on.exit(par(old))
+  size <- max(dim(colours))
+  plot(c(0, size), c(0, -size), type = "n", xlab = "", ylab = "",
+    axes = FALSE)
+  rect(col(colours) - 1, -row(colours) + 1, col(colours),
+    -row(colours), col = colours, border = "white")
+  stringr::str_length(labels) |> max() -> maxLen
+  if(is.null(label_size)){
+    cex_label = min(1, 1/(maxLen/5))
+  } else {
+    cex_label=label_size
+  }
+  labels = paste0(seq_along(labels),"\n", labels)
+  if(length(labels) < nrow*ncol) {
+    nEmpty = nrow*ncol-length(labels)
+    labels=c(labels, rep("", nEmpty))
+  }
+  matrix(labels, nrow=nrow, ncol=ncol, byrow=T)-> matLabels
+  hcl <- farver::decode_colour(colours, "rgb", "hcl")
+  label_col <- ifelse(hcl[, "l"] > 50, "black", "white")
+  text(col(colours) - 0.5, -row(colours) + 0.5, matLabels,
+    cex = cex_label, col = label_col)
+}
+
 #' From a character of colname, generate its I(objectName) expression in quo
 #'
 #' @param colname a character of variable name, such as "y2012".

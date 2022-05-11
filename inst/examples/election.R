@@ -78,7 +78,8 @@ directPlotlyPlot <- function(sf_elections_wider){
       xaxis=list(
         title=list(
           text="2012"
-        )
+        ),
+        side="top"
       )
     )-> list_plt[[1]]
   plotly::plot_ly() |>
@@ -92,7 +93,8 @@ directPlotlyPlot <- function(sf_elections_wider){
       xaxis=list(
         title=list(
           text="2016"
-        )
+        ),
+        side="top"
       )
     ) -> list_plt[[2]]
   plotly::plot_ly() |>
@@ -106,7 +108,8 @@ directPlotlyPlot <- function(sf_elections_wider){
       xaxis=list(
         title=list(
           text="2020"
-        )
+        ),
+        side="top"
       )
     ) -> list_plt[[3]]
 
@@ -200,7 +203,8 @@ prepare_for_choroplethColor <- function(df_elections) {
     cut(levelCuts)
 
   nLevels=length(levels(df_elections2$取色得票率區間))
-  colorspace::diverging_hcl(n = 10, h = c(245, 120), c = c(31, 100), l = c(30, 100), power = c(1, 1.3), register = "kmt-dpp") -> pal
+
+  pal = generate_palette()
 
   df_elections2$得票率顏色=df_elections2$取色得票率區間
   levels(df_elections2$得票率顏色) <-
@@ -239,6 +243,10 @@ create_sf <- function(df_elections) {
     ) -> sf_elections
   sf_elections
 }
+generate_palette <- function() {
+  colorspace::diverging_hcl(n = 10, h = c(245, 120), c = c(31, 100), l = c(30, 100), power = c(1, 1.3), register = "kmt-dpp") -> pal
+  pal
+}
 clean_data <- function(.df) {
   .df[1,] |> as.character() -> vnames
   names(.df) <- vnames
@@ -276,4 +284,72 @@ plot_oneYearElectionMap = function(sfX){
       fill=I(得票率顏色)
     ),
     color="#828282", size=0.1)
+}
+add_intervalLabels <- function(sf_elections) {
+  sf_elections$得票率顏色說明=sf_elections$得票率顏色
+  sf_elections$取色得票率區間 |>
+    levels() -> intervals
+  stringr::str_extract_all(intervals[6:10], "[:digit:]+") |>
+    purrr::map_chr(
+      ~{paste0(.x, collapse = "-")}
+    ) -> intervals2
+  levels(sf_elections$得票率顏色說明) <- c(rev(intervals2), intervals2)
+  sf_elections
+}
+create_distinctLabels <- function(.interval_part) {
+  .label = .interval_part
+  levels(.label) -> labelLevels
+  labelLevels
+  labelLevels[-c(2,7)] |> stringr::str_extract("[[:digit:]-]+") ->
+    labelLevels[-c(2,7)]
+
+  # labelLevels[7:10] <- paste0(labelLevels[7:10], "<span></span> ")
+  labelLevels[c(2,7)] <- c('國民黨<br>50-55',"民進黨<br>50-55")
+  labelLevels[7:10] <- paste0(labelLevels[7:10], "<span></span> ")
+  labelLevels
+}
+get_orderedLabels <- function(sf_election2012){
+  levels(sf_election2012$interval_part)
+  levels(sf_election2012$得票率顏色說明) |> rev() -> intervalLevels_ordered
+  parties <- rep(c("國民黨","民進黨"), each=5)
+
+  labels_ordered <- paste(intervalLevels_ordered,parties,sep=":")
+  labels_ordered
+}
+create_newLevels4split <- function(df_elections) {
+  newSplit = df_elections$取色得票率區間
+  levels(df_elections$取色得票率區間)[6:10] |>
+    stringr::str_extract_all("[[:digit:],]+") |>
+    purrr::map_chr(~stringr::str_replace(.x, ",", "-")) -> halfLevels
+  newLevels <-
+    c(paste0(rev(halfLevels),"<span></span>"), halfLevels)
+  levels(newSplit) = newLevels
+
+  factor(
+    newSplit,
+    levels=c(paste0(halfLevels, "<span></span>"),halfLevels)
+  ) -> newSplit
+
+  newSplit
+}
+plot_allYears <- function(sf_electionsByYears, ...) {
+  rlang::enexprs(...) -> quo_dot3
+  rlang::exprs(
+    data=sf_electionsByYears[[.x]],
+    color=~I(as.character(得票率顏色)),
+    alpha=1
+  ) -> quo_others
+  c(quo_dot3, quo_others) -> quo_all
+
+  list_plts <- vector("list",3)
+  for(.x in 1:3){
+    rlang::expr(
+      plotly::plot_ly() |>
+        add_sf(
+          !!!quo_all
+        )
+    ) -> toDo
+    rlang::eval_bare(toDo)-> list_plts[[.x]]
+  }
+  list_plts
 }
