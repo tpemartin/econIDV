@@ -6,9 +6,6 @@
 \usage{
 Visit()
 }
-\value{
-
-}
 \description{
 Visit plotly leaflet reference
 }

@@ -9,9 +9,6 @@ moveDep_out(filepath)
 \arguments{
 \item{filepath}{R script filepath}
 }
-\value{
-
-}
 \description{
 Move dependency function out of R scripts to dependency.R in /R
 }

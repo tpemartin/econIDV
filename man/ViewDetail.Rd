@@ -6,9 +6,6 @@
 \usage{
 ViewDetail()
 }
-\value{
-
-}
 \description{
 View tools to view x, function inputs
 }

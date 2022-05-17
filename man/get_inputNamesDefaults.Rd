@@ -9,9 +9,6 @@ get_inputNamesDefaults(fn)
 \arguments{
 \item{fn}{a function}
 }
-\value{
-
-}
 \description{
 Get input arguments' names and their defaults
 }

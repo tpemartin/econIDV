@@ -15,9 +15,6 @@ showTag(shinyTag = NULL, js = NULL, css = NULL, ...)
 
 \item{...}{other to pass to tagList}
 }
-\value{
-
-}
 \description{
 Creat and view a webpage in http mode
 }

@@ -13,9 +13,6 @@ legend_divergingBins(list_pal, labels, title = NULL, width = 200)
 
 \item{title}{title for the legend}
 }
-\value{
-
-}
 \description{
 Create legend for diverging bins representing two parties.
 }

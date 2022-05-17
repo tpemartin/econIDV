@@ -32,9 +32,6 @@ subplot_titles(
 
 \item{rightpull}{default=0, the right padding}
 }
-\value{
-
-}
 \description{
 Supply titles to the subplots panel produced by plotly::subplot()
 }

@@ -9,9 +9,6 @@ showX(obj)
 \arguments{
 \item{obj}{}
 }
-\value{
-
-}
 \description{
 Show X
 }

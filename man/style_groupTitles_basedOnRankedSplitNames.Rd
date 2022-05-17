@@ -13,9 +13,6 @@ style_groupTitles_basedOnRankedSplitNames(.plot, from, to)
 
 \item{to}{a ending character number for extracting group titles from get_ranked_splitNames(.plot)}
 }
-\value{
-
-}
 \description{
 Add legend group titles based on ranked split names
 }

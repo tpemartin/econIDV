@@ -6,9 +6,6 @@
 \usage{
 PlotlyTools()
 }
-\value{
-
-}
 \description{
 Create Plotly reference tools
 }

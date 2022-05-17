@@ -1,0 +1,26 @@
+/*Hiding*/
+g.traces:not(:first-child),rect.scrollbar {display: none;}
+/*Mask*/
+.election{
+  position: relative;
+}
+.parties{
+  position: absolute;
+  width: 182px;
+  height: 20px;
+  left: calc(50% - 182px/2 + 10px);
+  top: 198px;
+}
+.ddpIcon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 162px;
+  top: 0px;}
+.kmtIcon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 0px;
+  top: 0px;
+  }

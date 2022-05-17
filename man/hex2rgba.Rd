@@ -11,9 +11,6 @@ hex2rgba(hexcolor, alpha = 1)
 
 \item{alpha}{numeric, between 0 and 1. Default=1}
 }
-\value{
-
-}
 \description{
 Convert 6 digit hex color into a statement of "rgba(r, g, b, a)"
 }

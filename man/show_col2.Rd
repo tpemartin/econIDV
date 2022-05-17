@@ -4,15 +4,12 @@
 \alias{show_col2}
 \title{scales::show_col's revision where labels can be text other than color codes.}
 \usage{
-show_col2(colours, labels)
+show_col2(colours, labels, label_size = NULL)
 }
 \arguments{
 \item{colours}{characters of color}
 
 \item{labels}{characters of labels}
-}
-\value{
-
 }
 \description{
 scales::show_col's revision where labels can be text other than color codes.

@@ -9,9 +9,6 @@ prepare_githubPage(tag)
 \arguments{
 \item{tag}{a tag object}
 }
-\value{
-
-}
 \description{
 prepare for github page publication
 }

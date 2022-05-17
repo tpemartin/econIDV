@@ -1,3 +1,32 @@
+#' Import clipboard of Plotly Studio json view as a list
+#'
+#' @return
+#' @export
+#'
+#' @examples none.
+fromClipJSON <- function() {
+  clipr::read_clip() -> xx
+  stringr::str_subset(xx, "\\{[:digit:]+\\}$", negate=T) -> xx
+  xx |>
+    stringr::str_extract("^[^\t:]+") -> .patterns
+  glue::glue("\\b{.patterns}\\b") -> .patterns2
+  .replacements = paste0('"',.patterns,'"')
+  names(.replacements)=.patterns2
+  xx |> stringr::str_replace_all(.replacements) -> xx2
+  xx2 |>
+    stringr::str_remove_all("\t") -> xx3
+  xx3 |>
+    stringr::str_subset("(?<=:)[[:digit:]\\.]+$", negate=T) |>
+    stringr::str_extract("(?<=:)[^:]+$")-> .patterns
+  stringr::str_view(":#fff", "(?<=:)#fff$")
+  .replacements = paste0('"',.patterns,'"')
+  names(.replacements)=paste0("(?<=:)",.patterns, "$")
+  xx3 |>
+    stringr::str_replace_all(.replacements) -> xx4
+  paste0('{',paste(xx4, collapse=","),"}") |>
+    jsonlite::fromJSON() -> .json
+  .json
+}
 #' Get ranked split names
 #'
 #' @param .plot a plotly plot

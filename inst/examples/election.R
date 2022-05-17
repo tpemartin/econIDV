@@ -353,3 +353,80 @@ plot_allYears <- function(sf_electionsByYears, ...) {
   }
   list_plts
 }
+get_twoPartyPals <- function(){
+  pal=generate_palette()
+  c(rev(pal[1:5]), pal[6:10])
+}
+
+add_adjustedWinningPartyVoteShare <- function(sf_electionX) {
+  .intervals =
+    levels(sf_electionX$勝黨得票率區間)
+
+  .intervals[c(
+    seq(9,1,-2),
+    seq(10,2, -2)
+  )] -> .intervals2
+
+  # Change levels order
+  sf_electionX$勝黨得票率區間2 <-
+    factor(
+      sf_electionX$勝黨得票率區間,
+      levels=.intervals2
+    )
+  sf_electionX
+}
+
+add_trace_name <- function(sf_electionX) {
+  sf_electionX$trace_name =
+    sf_electionX$勝黨得票率區間2
+  levels(sf_electionX$trace_name)
+  oldLevels =
+    levels(sf_electionX$trace_name)
+
+  oldLevels |>
+    stringr::str_sub(end = -5) -> newLevels
+  newLevels
+  newLevels ->
+    levels(sf_electionX$trace_name)
+  sf_electionX$trace_name
+  sf_electionX
+}
+generate_plots_countiesXparties <- function(sf_electionsByYears) {
+  twoPartyPals = get_twoPartyPals()
+  list_splitByCountiesGroupByParties <- vector("list", 3)
+  for(.x in 1:3){
+    plotly::plot_ly() |>
+      add_sf(
+        data=sf_electionsByYears[[.x]],
+        legendgroup=~勝出政黨,
+        name=~paste0(round(勝出政黨得票率,digits=2)), #factor(勝出政黨得票率):factor(地區),
+        split=~地區,
+        color=~勝黨得票率區間2, colors=twoPartyPals,
+        alpha=1
+      ) -> list_splitByCountiesGroupByParties[[.x]]
+  }
+  list_splitByCountiesGroupByParties
+}
+
+generate_subplot_countiesXparties <- function( list_splitByCountiesGroupByParties) {
+  plotly::subplot(list_splitByCountiesGroupByParties) ->
+    subplot_splitByCountiesGroupByParties
+  subplot_splitByCountiesGroupByParties |>
+    plotly::style(
+      legendgrouptitle=list(text="國民黨"),
+      traces=1
+    ) |>
+    plotly::style(
+      legendgrouptitle=list(text="民進黨"),
+      traces=2
+    ) |>
+    plotly::layout(
+      legend=list(
+        # title=list(
+        #   text="得票率"
+        # ),
+        orientation="h"
+      )
+    ) -> subplot_splitByCountiesGroupByParties
+  subplot_splitByCountiesGroupByParties
+}

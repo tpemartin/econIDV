@@ -9,9 +9,6 @@ get_ranked_splitNames(.plot)
 \arguments{
 \item{.plot}{a plotly plot}
 }
-\value{
-
-}
 \description{
 Get ranked split names
 }

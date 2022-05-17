@@ -6,9 +6,6 @@
 \usage{
 Web()
 }
-\value{
-
-}
 \description{
 Create a web instance
 }

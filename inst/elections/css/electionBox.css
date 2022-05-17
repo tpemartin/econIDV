@@ -1,0 +1,7 @@
+/*Hiding*/
+g.traces:not(:first-child),rect.scrollbar {display: none;}
+/*Mask*/
+.election{position:relative;}
+.election-parties{position:absolute;width:175px;height:20px;left:calc(50% - 175px/2 + 9.5px);top:197px;}
+.election-parties-kmt{position:absolute;width:20px;height:20px;left:0px;top:0px;}
+.election-parties-dpp{position:absolute;width:20px;height:20px;left:155px;top:0px;}

@@ -9,9 +9,6 @@ remove_emptyGeometry(sf_elections)
 \arguments{
 \item{sf_elections}{a sf data frame}
 }
-\value{
-
-}
 \description{
 When a sf data frame has rows of empty geometry, ggplotly would produce error.
 }

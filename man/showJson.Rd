@@ -9,9 +9,6 @@ showJson(tag)
 \arguments{
 \item{tag}{a htmlwidget that has gone through showTag()}
 }
-\value{
-
-}
 \description{
 Show the JSON as a list from a htmlwidget
 }

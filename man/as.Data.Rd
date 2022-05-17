@@ -9,9 +9,6 @@ as.Data(object)
 \arguments{
 \item{object}{}
 }
-\value{
-
-}
 \description{
 Add data to object's class
 }

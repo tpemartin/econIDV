@@ -18,3 +18,8 @@ Description: New Addin Description
 Binding: moveAllDepsOut
 Interactive: false
 
+Name: attach input/output menu
+Description: New Addin Description
+Binding: attach_io_fromClipboardUI
+Interactive: false
+

@@ -6,9 +6,6 @@
 \usage{
 Examples()
 }
-\value{
-
-}
 \description{
 Generate list of example environment
 }
