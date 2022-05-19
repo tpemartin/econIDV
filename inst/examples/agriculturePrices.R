@@ -132,3 +132,21 @@ add_categories <- function(df_agPrices) {
   levels(df_agPrices$Cat) <- as.character(afterCut)
   df_agPrices
 }
+plot_highlighted <- function(df_highlighted){
+ df_highlighted |>
+    plotly::plot_ly() |>
+    add_trace(
+      type="scatter", mode="lines",
+      x=~TIME_PERIOD,
+      y=~Item_VALUE,
+      name=~Item2,
+      split=~Item2,
+      color=I("#828282"),
+      legendgroup=~Cat
+    ) |>
+    plotly::layout(
+      legend=list(
+        orientation="h"
+      )
+    )
+}

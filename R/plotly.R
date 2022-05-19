@@ -1,3 +1,68 @@
+#' Reorder legend groups based on desired group titles in order
+#'
+#' @param p a plotly plot with legend group titles already there.
+#' @param legendgrouptitles a character vector of legend group titles in desired order
+#'
+#' @return a plotly plot
+#' @export
+#'
+reorderTraceByLegendgrouptitles <- function(p, legendgrouptitles) {
+  p |>
+    econIDV::getTable_legendgrouptitle_trace() -> tbl_title_trace
+
+  legendranks = 1:length(legendgrouptitles)
+  names(legendranks) = legendgrouptitles
+  for(.x in seq_along(tbl_title_trace$tracename)){
+    p=plotly::style(
+      p,
+      legendrank=legendranks[[tbl_title_trace$grouptitle[[.x]]]],
+      traces=tbl_title_trace$tracename[[.x]]
+    )
+  }
+  p
+}
+#' Add legend group title to a plotly plot that already has legendgroup defined.
+#'
+#' @param p a plotly object.
+#' @param legendgrouptitles default=NULL, or a vector of legendgrouptiles in desired order.
+#'
+#' @return a plotly object. If legendgrouptitles supplied, the plot will have legend groups presented in sequence as in legendgrouptitles.
+#' @export
+#'
+add_legendgrouptitle <- function(p, legendgrouptitles=NULL) {
+  getTable_legendgrouptitle_trace(p) -> groupMap2
+  if(is.null(legendgrouptitles)){
+    p |>
+      style_legendgrouptitle(groupMap = groupMap2) -> p1
+  } else {
+    p |>
+      style_legendgrouptitle2(groupMap = groupMap2,
+        legendgrouptitles) -> p1
+  }
+  return(p1)
+}
+#' Get the table of legend group title and trace
+#'
+#' @param p a plotly object
+#'
+#' @return a data frame
+#' @export
+getTable_legendgrouptitle_trace <- function(p) {
+  plotly::plotly_build(p) -> p_build
+  seq_along(p_build$x$data) |>
+    purrr::map_dfr(
+      ~{
+        data.frame(
+          tracename=.x,
+          grouptitle=p_build$x$data[[.x]]$legendgroup)}) -> groupMap
+
+  groupMap |>
+    dplyr::group_by(grouptitle) |>
+    dplyr::summarise(
+      tracename=min(tracename)
+    ) |>
+    dplyr::ungroup()
+}
 #' Import clipboard of Plotly Studio json view as a list
 #'
 #' @return
@@ -196,7 +261,24 @@ find_li_with_attribute <- function(all_li, attr){
 #' @param group_by a name. The column of df that is used for legendgroup.
 #'
 #' @return a character vector of legendgrouptitles in trace order.
+#'
+#' @export
 get_legendGroupTitles <- function(df, label_by, group_by){
+  groupMap = get_groupMap(df, label_by, group_by)
+
+  groupMap |>
+    group_by(grouptitle) |>
+    summarise(
+      label=label[[1]],
+      tracename=min(tracename)
+    ) |>
+    ungroup() |>
+    arrange(tracename) -> groupMap2
+  groupMap2
+
+  groupMap2
+}
+get_groupMap <- function(df, label_by, group_by) {
   quo_label_by = rlang::enquo(label_by)
   quo_group_by = rlang::enquo(group_by)
   df |>
@@ -208,6 +290,31 @@ get_legendGroupTitles <- function(df, label_by, group_by){
       !!quo_group_by, !!quo_label_by
     ) -> groupMap
 
-  groupMap[[1]][order(groupMap[[2]])] |>
-    as.character() |> unique()
+  names(groupMap) <- c("grouptitle", "label")
+  groupMap$tracename=1:nrow(groupMap)
+  groupMap
+}
+style_legendgrouptitle <- function(p, groupMap) {
+  for(.x in seq_along(groupMap$tracename)){
+    p=plotly::style(
+      p,
+      legendgrouptitle=list(text=groupMap$grouptitle[[.x]]),
+      traces=groupMap$tracename[[.x]]
+    )
+  }
+  p
+}
+
+style_legendgrouptitle2 <- function(p, groupMap, legendgrouptitles) {
+  legendranks = 1:length(legendgrouptitles)
+  names(legendranks) = legendgrouptitles
+  for(.x in seq_along(groupMap$tracename)){
+    p=plotly::style(
+      p,
+      legendgrouptitle=list(text=groupMap$grouptitle[[.x]]),
+      legendrank=legendranks[[groupMap$grouptitle[[.x]]]],
+      traces=groupMap$tracename[[.x]]
+    )
+  }
+  p
 }
