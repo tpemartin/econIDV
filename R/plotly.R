@@ -189,3 +189,25 @@ find_li_with_attribute <- function(all_li, attr){
   ) |> which() -> whichHasTargetAttribute
   all_li[whichHasTargetAttribute]
 }
+#' Get legend group titles in trace orders
+#'
+#' @param df a dataframe
+#' @param label_by a name. The column of df that is used to generate legend label
+#' @param group_by a name. The column of df that is used for legendgroup.
+#'
+#' @return a character vector of legendgrouptitles in trace order.
+get_legendGroupTitles <- function(df, label_by, group_by){
+  quo_label_by = rlang::enquo(label_by)
+  quo_group_by = rlang::enquo(group_by)
+  df |>
+    dplyr::group_by(
+      !!quo_label_by
+    ) |>
+    dplyr::slice(1) |>
+    dplyr::select(
+      !!quo_group_by, !!quo_label_by
+    ) -> groupMap
+
+  groupMap[[1]][order(groupMap[[2]])] |>
+    as.character() |> unique()
+}

@@ -80,3 +80,55 @@ prepare_agProductDataFrame <- get_agProductDataFrame <- function(xml) {
 }
 # xml |> get_agProductDataFrame() ->
 #   df_agPrices
+add_categories <- function(df_agPrices) {
+
+  df_agPrices$Item |> levels() -> itemLevels
+  stringr::str_extract(itemLevels,"^[0-9]+") |>
+    as.numeric() -> itemNumbers
+
+  itemLevels[
+    order(itemNumbers)
+  ] -> itemLevels_ordered
+
+  df_agPrices$Item <-
+    factor(
+      df_agPrices$Item,
+      levels=itemLevels_ordered
+    )
+  df_agPrices$Item -> df_agPrices$Cat
+  # levels(df_agPrices$Cat) -> catLevels
+  catCut <- c(0, 10, # 米、麵、麥
+    16, # 肉
+    19, # 肉製品
+    21, # 蛋
+    36, # 魚
+    39, # 甲殼類
+    41, # 其他海鮮
+    59, # 根莖類
+    72, # 葉菜類
+    88, # 其他
+    94, # 加工蔬菜
+    118, # 水果
+    120, # 加工水果
+    121, # 鮮奶
+    124, # 乳製品
+    127, # 油
+    132, # 調味品
+    136, # 酒
+    138, # 茶葉相關
+    146, # 飲料
+    152, # 調理食品
+    164, # 餐廳料理
+    171 # 休閒食品
+  )
+  categories = c("米、麵、麥", "肉", "肉製品", "蛋", "魚", "甲殼類",
+    "其他海鮮", "根莖類", "葉菜類", "其他", "加工蔬菜",
+    "水果", "加工水果", "鮮奶", "乳製品", "油", "調味品",
+    "酒", "茶葉相關", "飲料", "調理食品", "餐廳料理",
+    "休閒食品")
+  1:171 |>
+    cut(catCut) -> afterCut
+  levels(afterCut) <- categories
+  levels(df_agPrices$Cat) <- as.character(afterCut)
+  df_agPrices
+}
