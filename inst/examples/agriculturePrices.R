@@ -142,11 +142,15 @@ plot_highlighted <- function(df_highlighted){
       name=~Item2,
       split=~Item2,
       color=I("#828282"),
-      legendgroup=~Cat
+      legendgroup=~Cat,
+      hoverinfo='y+x+name',
+      line=list(width=0.1)
     ) |>
     plotly::layout(
       legend=list(
         orientation="h"
-      )
+      ),
+      yaxis=list(showgrid=F, showline=F, title=list(text=NULL)),
+      xaxis=list(showgrid=F, title=list(text=NULL))
     )
 }

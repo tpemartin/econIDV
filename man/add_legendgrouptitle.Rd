@@ -2,18 +2,20 @@
 % Please edit documentation in R/plotly.R
 \name{add_legendgrouptitle}
 \alias{add_legendgrouptitle}
-\title{Add legend group title to a plotly plot that already has legendgroup defined.}
+\title{Add legend group titles}
 \usage{
-add_legendgrouptitle(p, legendgrouptitles = NULL)
+add_legendgrouptitle(p, traceInfo = NULL, ...)
 }
 \arguments{
-\item{p}{a plotly object.}
+\item{p}{a plotly plot.}
 
-\item{legendgrouptitles}{default=NULL, or a vector of legendgrouptiles in desired order.}
+\item{traceInfo}{a data frame with legendgroup (i.e. title) and trace (i.e. trace number) columns. Default=NULL will be supplied by calling get_traceInfo(p). `traceInfo$legendgroup` is a factor whose level sequence determines legend group sequence.}
+
+\item{...}{other parameters passed to all `style(legendgrouptitle=list(...),)`.}
 }
 \value{
-a plotly object. If legendgrouptitles supplied, the plot will have legend groups presented in sequence as in legendgrouptitles.
+a plotly plot
 }
 \description{
-Add legend group title to a plotly plot that already has legendgroup defined.
+Add legend group titles
 }

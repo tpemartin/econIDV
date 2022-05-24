@@ -23,3 +23,8 @@ Description: New Addin Description
 Binding: attach_io_fromClipboardUI
 Interactive: false
 
+Name: Test js
+Description: New Addin Description
+Binding: test_js
+Interactive: false
+

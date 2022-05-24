@@ -2,7 +2,26 @@
 % Please edit documentation in R/plotly.R
 \name{getTable_legendgrouptitle_trace}
 \alias{getTable_legendgrouptitle_trace}
-\title{Get the table of legend group title and trace}
+\title{#' Add legend group title to a plotly plot that already has legendgroup defined.
+#'
+#' @param p a plotly object.
+#' @param legendgrouptitles default=NULL, or a vector of legendgrouptiles in desired order.
+#'
+#' @return a plotly object. If legendgrouptitles supplied, the plot will have legend groups presented in sequence as in legendgrouptitles.
+#' @export
+#'
+add_legendgrouptitle <- function(p, legendgrouptitles=NULL) {
+  getTable_legendgrouptitle_trace(p) -> groupMap2
+  if(is.null(legendgrouptitles)){
+    p |>
+      style_legendgrouptitle(groupMap = groupMap2) -> p1
+  } else {
+    p |>
+      style_legendgrouptitle2(groupMap = groupMap2,
+        legendgrouptitles) -> p1
+  }
+  return(p1)
+}}
 \usage{
 getTable_legendgrouptitle_trace(p)
 }

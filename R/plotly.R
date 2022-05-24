@@ -1,3 +1,49 @@
+#' Add legend group titles
+#'
+#' @param p a plotly plot.
+#' @param traceInfo a data frame with legendgroup (i.e. title) and trace (i.e. trace number) columns. Default=NULL will be supplied by calling get_traceInfo(p). `traceInfo$legendgroup` is a factor whose level sequence determines legend group sequence.
+#' @param ...  other parameters passed to all `style(legendgrouptitle=list(...),)`.
+#'
+#' @return a plotly plot
+#' @export
+#'
+add_legendgrouptitle <- function(p, traceInfo=NULL, ...){
+  if(is.null(traceInfo)) {
+    traceInfo = get_traceInfo(p)
+  }
+  traceInfo |>
+    applyTraceInfo(p, ...)
+}
+#' Get trace information: its name, trace number and legend group
+#'
+#' @param p a plotly plot.
+#'
+#' @return a data frame
+#' @export
+#'
+get_traceInfo <- function(p) {
+  p |>
+    plotly::plotly_build() -> pbuild
+  xdata <- pbuild$x$data
+  traceNumber <- length(xdata)
+  traceInfo <- data.frame(
+    name=character(traceNumber)
+  )
+  xdata |>
+    seq_along() |>
+    purrr::map_dfr(
+      ~{
+        # .x=1
+        data.frame(
+          name=xdata[[.x]]$name
+        ) -> dfx
+        if(!is.null(xdata[[.x]]$legendgroup)) dfx$legendgroup=xdata[[.x]]$legendgroup
+        dfx
+      }
+    ) -> traceInfo
+  traceInfo$trace = 1:length(xdata)
+  traceInfo
+}
 #' Reorder legend groups based on desired group titles in order
 #'
 #' @param p a plotly plot with legend group titles already there.
@@ -21,26 +67,29 @@ reorderTraceByLegendgrouptitles <- function(p, legendgrouptitles) {
   }
   p
 }
-#' Add legend group title to a plotly plot that already has legendgroup defined.
+
+#' #' Add legend group title to a plotly plot that already has legendgroup defined.
+#' #'
+#' #' @param p a plotly object.
+#' #' @param legendgrouptitles default=NULL, or a vector of legendgrouptiles in desired order.
+#' #'
+#' #' @return a plotly object. If legendgrouptitles supplied, the plot will have legend groups presented in sequence as in legendgrouptitles.
+#' #' @export
+#' #'
+#' add_legendgrouptitle <- function(p, legendgrouptitles=NULL) {
+#'   getTable_legendgrouptitle_trace(p) -> groupMap2
+#'   if(is.null(legendgrouptitles)){
+#'     p |>
+#'       style_legendgrouptitle(groupMap = groupMap2) -> p1
+#'   } else {
+#'     p |>
+#'       style_legendgrouptitle2(groupMap = groupMap2,
+#'         legendgrouptitles) -> p1
+#'   }
+#'   return(p1)
+#' }
 #'
-#' @param p a plotly object.
-#' @param legendgrouptitles default=NULL, or a vector of legendgrouptiles in desired order.
-#'
-#' @return a plotly object. If legendgrouptitles supplied, the plot will have legend groups presented in sequence as in legendgrouptitles.
-#' @export
-#'
-add_legendgrouptitle <- function(p, legendgrouptitles=NULL) {
-  getTable_legendgrouptitle_trace(p) -> groupMap2
-  if(is.null(legendgrouptitles)){
-    p |>
-      style_legendgrouptitle(groupMap = groupMap2) -> p1
-  } else {
-    p |>
-      style_legendgrouptitle2(groupMap = groupMap2,
-        legendgrouptitles) -> p1
-  }
-  return(p1)
-}
+
 #' Get the table of legend group title and trace
 #'
 #' @param p a plotly object
@@ -317,4 +366,23 @@ style_legendgrouptitle2 <- function(p, groupMap, legendgrouptitles) {
     )
   }
   p
+}
+applyTraceInfo <- function(traceInfo, p, ...) {
+  traceInfo$legendrank=as.integer(traceInfo$legendgroup)
+  traceInfo |>
+    split(traceInfo$legendgroup) ->
+    split_traceInfo
+  c(list(p), split_traceInfo) |>
+    purrr::reduce(
+      ~{
+
+        plotly::style(
+        .x,
+        legendgrouptitle=list(
+          text=.y$legendgroup
+        ),
+        legendrank=.y$legendrank,
+        traces=.y$trace
+      )}
+    )
 }

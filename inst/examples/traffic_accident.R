@@ -43,7 +43,7 @@ download_traffic_data=function(){
   traffic$縣市 = stringr::str_sub(.city_town, 1,3)
   traffic$區鄉鎮市 = stringr::str_sub(.city_town, 4)
 
-  glue::glue("https://www.google.com/maps/search/?api=1&query={traffic$緯度},{traffic$經度}") ->
+  stringr::str_glue("https://www.google.com/maps/search/?api=1&query={traffic$緯度},{traffic$經度}") ->
     traffic$googleMap
 
   traffic -> .GlobalEnv$traffic
