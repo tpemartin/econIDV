@@ -154,3 +154,99 @@ plot_highlighted <- function(df_highlighted){
       xaxis=list(showgrid=F, title=list(text=NULL))
     )
 }
+plot_agprices_complete <- function(df) {
+  xgrids <- list(
+    gridwidth = 0.1,
+    gridcolor = "#434343",
+    showgrid = T, showline = T
+  )
+  xticks <- list(
+    dtick = "M12", # 座標點相隔12個月
+    tickformat = "%Y", # 座標只放年
+    ticklabelmode = "period"
+  )
+  xrangeSelector <- list(
+    rangeselector = {
+      list(
+        buttons = {
+          list(
+            list(
+              count = 3,
+              label = "3 mo",
+              step = "month",
+              stepmode = "backward"
+            ),
+            list(
+              count = 6,
+              label = "6 mo",
+              step = "month",
+              stepmode = "backward"
+            ),
+            list(
+              count = 1,
+              label = "1 yr",
+              step = "year",
+              stepmode = "backward"
+            ),
+            list(
+              count = 1,
+              label = "YTD",
+              step = "year",
+              stepmode = "todate"
+            ),
+            list(step = "all")
+          )
+        }
+      )
+    }
+  )
+  xrangeSlider <- list(
+    rangeslider = list(type = "date")
+  )
+
+  plotly::plot_ly(df) |>
+    add_trace(
+      type = "scatter", mode = "lines",
+      x = ~TIME_PERIOD,
+      y = ~Item_VALUE,
+      name = ~Item2, # trace名稱, 也是legend label
+      split = ~Item2, # 切割trace依據
+      color = I("white"),
+      legendgroup = ~Cat, # 相同Cat合併成一trace.
+      # legendgrouptitle=list(font=list(color="white")),
+      hovertemplate = "%{x|%b%Y}",
+      line = list(width = 0.3)
+    ) |>
+    plotly::layout(
+      title=list(text="各類食品消費者物價指數",
+        font=list(color="white")),
+      legend = list(
+        orientation = "h",
+        y=-0.2,
+        font=list(color="#e6e6e6"),
+        grouptitlefont=list(color="white"),
+        title=list(font=list(color="white"))
+      ),
+      height=600,
+      plot_bgcolor = "black",
+      paper_bgcolor = "#c5a880",
+      margin=list(t=57),
+      yaxis = list(
+        gridwidth = 0.1, gridcolor = "#434343",
+        showgrid = T, showline = F,
+        title = list(text = NULL),
+        range = c(0, 250)
+      ), # fixed range
+      xaxis =
+        c(
+          list(title=list(text = NULL)),
+          xgrids,
+          xticks,
+          # Range slider and selectors
+          xrangeSelector,
+          xrangeSlider
+        )
+    ) |>
+    econIDV::add_legendgrouptitle(font=list(color="white")) -> plt_complete
+  plt_complete
+}
