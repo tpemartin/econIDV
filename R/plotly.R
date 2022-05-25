@@ -33,9 +33,14 @@ get_traceInfo <- function(p) {
     seq_along() |>
     purrr::map_dfr(
       ~{
-        # .x=1
+        if(is.null(xdata[[.x]]$name)){
+          .name=uuid::UUIDgenerate()
+        } else {
+          .name=xdata[[.x]]$name
+        }
         data.frame(
-          name=xdata[[.x]]$name
+          name=.name,
+          legendgroup=c(NA)
         ) -> dfx
         if(!is.null(xdata[[.x]]$legendgroup)) dfx$legendgroup=xdata[[.x]]$legendgroup
         dfx
