@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 temp/
+data/test4.Rds
+data/test6.Rds

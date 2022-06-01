@@ -4,7 +4,7 @@
 \alias{showWidget}
 \title{As browseURL but it browse a shiny.tag or html class object in RStudio Viewer}
 \usage{
-showWidget(tag = .Last.value)
+showWidget(.tag = .Last.value)
 }
 \arguments{
 \item{tag}{A shiny.tag or html class object}

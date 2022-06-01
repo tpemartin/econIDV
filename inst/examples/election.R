@@ -430,3 +430,20 @@ generate_subplot_countiesXparties <- function( list_splitByCountiesGroupByPartie
     ) -> subplot_splitByCountiesGroupByParties
   subplot_splitByCountiesGroupByParties
 }
+plot_3yearsElection <- function( sf_electionsByYears) {
+  list_splitByCounties <- vector("list", 3)
+  for(.x in 1:3){
+    plotly::plot_ly() |>
+      add_sf(
+        data=sf_electionsByYears[[.x]],
+        legendgroup=~地區,
+        name=~label_share(勝出政黨得票率),
+        color=~勝黨得票率區間2,
+        colors=twoPartyPals,
+        alpha=1
+      ) -> list_splitByCounties[[.x]]
+  }
+
+  plotly::subplot(list_splitByCounties) -> subplot0
+  subplot0
+}

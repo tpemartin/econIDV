@@ -1,3 +1,32 @@
+#' Create a layout instance
+#'
+#' @return a layout instance ly. ly$layout(p, ..)  to be used as plotly::layout. ly$layout(...) simply creates a list of layout specifications. ly$layout(..., lytitle=NULL) where lytitle is a decription of this layout when ly$.layout shows all the layouts lytitle sill be element names. ly$mergedLayout() merge all layouts into one.
+#' @export
+Layout <- function(){
+  ly=new.env()
+  ly$.layout=list()
+  ly$mergedLayout = function() do.call(econIDV::merge_list, ly$.layout)
+  ly$layout = function(..., lytitle=NULL){
+    argList=list(...)
+
+    if("plotly" %in% class(argList[[1]])){
+      list2append=argList[-1]
+      p=argList[[1]]
+    } else {
+      list2append=argList
+    }
+    append(ly$.layout, list(list2append)) ->
+      ly$.layout
+    if(!is.null(lytitle)){
+      names(ly$.layout)[length(ly$.layout)]=lytitle
+    }
+
+    if("plotly" %in% class(argList[[1]])){
+      do.call(function(...) plotly::layout(argList[[1]],...), ly$mergedLayout())
+    }
+  }
+  ly
+}
 #' Add legend group titles
 #'
 #' @param p a plotly plot.

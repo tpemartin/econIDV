@@ -23,8 +23,8 @@ Description: New Addin Description
 Binding: attach_io_fromClipboardUI
 Interactive: false
 
-Name: Test js
+Name: Start local server job
 Description: New Addin Description
-Binding: test_js
+Binding: serverJob
 Interactive: false
 
