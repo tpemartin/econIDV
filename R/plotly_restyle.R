@@ -1,4 +1,4 @@
-#' Title
+#' List the difference of traces from two plots
 #'
 #' @param plt0 current plotly plot
 #' @param plt1 new plotly plot
