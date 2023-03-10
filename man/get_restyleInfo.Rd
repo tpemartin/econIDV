@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotly_restyle.R
 \name{get_restyleInfo}
 \alias{get_restyleInfo}
-\title{Title}
+\title{List the difference of traces from two plots}
 \usage{
 get_restyleInfo(plt0, plt1, traceId)
 }
@@ -17,5 +17,5 @@ get_restyleInfo(plt0, plt1, traceId)
 a list of two, one tell which traces have changed, the other give the restyle content of each changed trace.
 }
 \description{
-Title
+List the difference of traces from two plots
 }

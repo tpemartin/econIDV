@@ -420,3 +420,17 @@ applyTraceInfo <- function(traceInfo, p, ...) {
       )}
     )
 }
+#' do.call on plotly add_trace
+#'
+#' @param p a plotly object
+#' @param .trace a list of argument=value pairs that defines a trace. Can be a plotly object$x$data[[i]] value.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+do_add_trace=function(p, .trace){
+  tt = append(list(p), .trace)
+  plotly::add_trace -> plotAddTrace
+  do.call("plotAddTrace",tt)
+}
