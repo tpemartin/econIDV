@@ -434,3 +434,18 @@ do_add_trace=function(p, .trace){
   plotly::add_trace -> plotAddTrace
   do.call("plotAddTrace",tt)
 }
+#' do.call on plotly layout
+#'
+#' @param p a plotly object
+#' @param .layout a list of argument=value pairs that defines layout. Can be a plotly object$x$data$layout value.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+do_layout=function(p, .layout){
+  lout = append(list(p), .layout)
+  plotly::layout -> plotLayout
+  do.call("plotLayout",lout)
+}
+
