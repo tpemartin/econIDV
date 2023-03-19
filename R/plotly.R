@@ -437,7 +437,7 @@ do_add_trace=function(p, .trace){
 #' do.call on plotly layout
 #'
 #' @param p a plotly object
-#' @param .layout a list of argument=value pairs that defines layout. Can be a plotly object$x$data$layout value.
+#' @param .layout a list of argument=value pairs that defines layout. Can be a plotly object$x$layout value.
 #'
 #' @return
 #' @export
@@ -447,5 +447,19 @@ do_layout=function(p, .layout){
   lout = append(list(p), .layout)
   plotly::layout -> plotLayout
   do.call("plotLayout",lout)
+}
+#' do.call on plotly config
+#'
+#' @param p a plotly object
+#' @param .config a list of argument=value pairs that defines config. Can be a plotly object$x$config value.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+do_config=function(p, .config){
+  config = append(list(p), .config)
+  plotly::config -> plotconfig
+  do.call("plotconfig",config)
 }
 

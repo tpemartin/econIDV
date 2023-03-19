@@ -9,7 +9,7 @@ do_layout(p, .layout)
 \arguments{
 \item{p}{a plotly object}
 
-\item{.layout}{a list of argument=value pairs that defines layout. Can be a plotly object$x$data$layout value.}
+\item{.layout}{a list of argument=value pairs that defines layout. Can be a plotly object$x$layout value.}
 }
 \description{
 do.call on plotly layout
