@@ -463,3 +463,45 @@ do_config=function(p, .config){
   do.call("plotconfig",config)
 }
 
+#' Save and browse plotly
+#'
+#' @param plt0 a plotly object
+#' @param file html file name, default="plt0.html"
+#'
+#' @return
+#' @export
+#'
+#' @examples
+saveBrowse <- function(plt0, file="plt0.html") {
+  htmlwidgets::saveWidget(plt0, file=file, selfcontained = F)
+  browseURL("plt0.html")
+}
+
+#' Get attribute list pairs from a trace list
+#'
+#' @param traceInf a expression of trace list
+#' @param attr2keep a character of attributes to keep
+#'
+#' @return an invisible character expression of the list pair. Implicitly copy to clipboard.
+#' @export
+#'
+#' @examples
+#' attr2keep = c('orientation','type','textposition','marker',
+#'  showlegend','xaxis','yaxis','hoverinfo','frame')
+#' trace[[1]] |>
+#'   getAttributeListPairs(attr2keep)
+#'
+getAttributeListPairs <- function(traceInf, attr2keep) {
+  exprTraceInfo <- rlang::enexpr(traceInf)
+  traceName <- exprTraceInfo |>
+    as.expression() |>
+    as.character()
+
+  attr2keep |>
+    paste0(glue::glue(" = {traceName}$"), attr2keep) |>
+    paste0(",") -> attrsSetup
+  .last <- length(attr2keep)
+  attrsSetup[[.last]] |> stringr::str_remove(",\n$") -> attrsSetup[[.last]]
+  attrsSetup |> clipr::write_clip(allow_non_interactive = TRUE)
+  invisible(attrsSetup)
+}
