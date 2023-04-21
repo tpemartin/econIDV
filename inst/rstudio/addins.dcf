@@ -1,30 +1,9 @@
-Name: Update package
+Name: get name=value pairs from a list
 Description: New Addin Description
-Binding: update_package
-Interactive: false
-
-Name: Clear up globalEnv
-Description: New Addin Description
-Binding: remove_unwanted
+Binding: getAttributeListPairsFromClipboard
 Interactive: false
 
 Name: Reload package
 Description: New Addin Description
 Binding: unload_reload
 Interactive: false
-
-Name: Centralize dependency
-Description: New Addin Description
-Binding: moveAllDepsOut
-Interactive: false
-
-Name: attach input/output menu
-Description: New Addin Description
-Binding: attach_io_fromClipboardUI
-Interactive: false
-
-Name: Start local server job
-Description: New Addin Description
-Binding: serverJob
-Interactive: false
-

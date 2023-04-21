@@ -502,6 +502,34 @@ getAttributeListPairs <- function(traceInf, attr2keep) {
     paste0(",") -> attrsSetup
   .last <- length(attr2keep)
   attrsSetup[[.last]] |> stringr::str_remove(",\n$") -> attrsSetup[[.last]]
+  attrsSetup |>
+    removeCommaFromLastLine() -> attrsSetup
   attrsSetup |> clipr::write_clip(allow_non_interactive = TRUE)
   invisible(attrsSetup)
+}
+getAttributeListPairsFromClipboard = function(){
+  clipr::read_clip() |>
+    getAttributeListPairsFromString()
+}
+
+
+getAttributeListPairsFromString = function(exprString)
+{
+
+  # exprString = "chartB$traces[[2]]"
+  exprExpr = rlang::parse_expr(exprString)
+
+  exprExprSubstituted = rlang::expr(
+    getAttributeListPairs(!!exprExpr, names(!!exprExpr))
+  )
+
+  rlang::eval_bare(exprExprSubstituted, env=rlang::caller_env())
+
+}
+removeCommaFromLastLine = function(txt){
+
+  txt[[length(txt)]] |>
+    stringr::str_remove(",$") ->
+    txt[[length(txt)]]
+  return(txt)
 }
