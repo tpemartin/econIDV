@@ -3,6 +3,7 @@
 export(Examples)
 export(Icons)
 export(Layout)
+export(LeafletTools)
 export(Object)
 export(PlotlyTools)
 export(ScaleOff)
