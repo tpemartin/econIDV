@@ -3,55 +3,102 @@
 #' @description Create a tools environment.
 #' @return a tool environment
 #' @export
-LeafletTools <- function() {
+LeafletTools <- function(m) {
+  library(leaflet)
+
+
   lf <- new.env()
-  lf$getTileArgsFromCall <- getTileArgs(lf)
-  lf$getMarkerArgsFromCall <- getMarkerArgs
+  x=m$x
+  callx = x$calls[[2]]
+
+
+  lf$calls <- {
+    # return a vector of functions. each generates the corresponding
+    # js expression for the corresponding call
+    m$x$call |>
+      purrr::map(
+        ~{
+          function(){
+            getJsExpressionForCall(.x)
+          }
+        }
+      )
+
+
+  }
+
+  lf$allCalls <- function(){
+    # return one js expression for all calls together
+    lf$calls |>
+      purrr::map(~{.x()})
+  }
+
   return(lf)
 }
-getTileArgs <- function(lf) {
-  function(callx) {
-    callx$args |>
-      purrr::keep(~ {
-        length(.x) != 0
-      }) -> xx
-    lf$tile$args <- xx
-    lf$tile$js <- function() {
-      createJStile(lf$tile$args)
-    }
-  }
-}
-getMarkerArgs <- function(lf) {
-  function(callx) {
-    args <- callx$args
-    list(
-      lat = args[[1]],
-      lng = args[[2]],
-      markerOptions = args[[6]] |> jsonlite::toJSON(auto_unbox = T),
-      popup = ifelse(is.null(args[[7]]),
-        NULL,
-        list(
-          content = args[[7]],
-          options = {
-            args[[12]] |> jsonlite::toJSON(auto_unbox = T)
-          }
-        )
-      )
-    ) -> markerArgs
 
-    lf$marker$args <- markerArgs
-    lf$marker$js <- function() {
-      createJSmarker(lf$marker$args)
+getJsExpressionForCall=function(callx){
+  switch(
+    callx$method,
+    "addMarkers"={
+      callxArgs = callx$args
+      ix = c(1,2,6,7,12)
+      names(callxArgs)[ix] <-
+        c("lat","lng","marketOptions", "popupContent", "popupOptions")
+
+      callxArgs[-ix] <- NULL
+
+      callxArgs |>
+        jsonlite::toJSON(auto_unbox = T) -> jsArgs
+      popup = ifelse(is.null(callxArgs$popupContent),NULL,
+                     "mk.bindPopup(args.popupContent,args.popupOptions)")
+      "
+// {callx$method}
+args={jsArgs}
+latLng = L.latLng(args.lat,args.lng)
+mk = L.marker(latLng, args.markerOptions)
+{popup}
+mk.addTo(m)
+" |> glue::glue() -> jsExpression
+      jsExpression
+    },
+    "addCircleMarkers"={
+      ix=c(1,2,3,6,9,12)
+      callxArgs <- callx$args
+      names(callxArgs)[ix] <-
+        c("lat","lng", "radius","markerOptions", "popupContent", "popupOptions")
+      callxArgs[-ix] <- NULL
+
+      list(radius=callxArgs$radius) |>
+        append(callxArgs$markerOptions) -> callxArgs$markerOptions
+
+      callxArgs |>
+        jsonlite::toJSON(auto_unbox = T) -> jsArgs
+      popup = ifelse(is.null(callxArgs$popupContent),NULL,
+                     "mk.bindPopup(args.popupContent,args.popupOptions)")
+      "
+// {callx$method}
+args={jsArgs}
+latLng = L.latLng(args.lat,args.lng)
+mk = L.circleMarker(latLng, args.markerOptions)
+{popup}
+mk.addTo(m)
+" |> glue::glue() -> jsExpression
+      jsExpression
+    },
+    "addTiles"={
+      callx$args |>
+        purrr::keep(~ {
+          length(.x) != 0
+        }) -> argsx
+      "
+// {callx$method}
+t = L.tileLayer(...{argsx |> jsonlite::toJSON(auto_unbox = T)})
+t.addTo(m)
+" |>
+        glue::glue() -> jsExpression
+      jsExpression
     }
-  }
+  )
 }
-createJStile <- function(tileArgs) {
-  glue::glue("//tile layer
-  t = L.tileLayer(...{tileArgs |> jsonlite::toJSON(auto_unbox = T)})") -> xx
-  xx |> clipr::write_clip()
-  xx
-}
-createJSmarker <- function(markerArgs) {
-  glue::glue('// markers\nvar latLng = L.latLng({markerArgs$lat},{markerArgs$lng});\nvar mk = L.marker(latLng,\n\t{markerArgs$markerOptions})\nmk.bindPopup("{markerArgs$popup$content}",\n\t{markerArgs$popup$options})\n') -> xx
-  xx |> clipr::write_clip()
-}
+
+
