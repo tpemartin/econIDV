@@ -8,9 +8,6 @@ LeafletTools <- function(m) {
 
 
   lf <- new.env()
-  x=m$x
-  callx = x$calls[[2]]
-
 
   lf$calls <- {
     # return a vector of functions. each generates the corresponding
@@ -37,6 +34,7 @@ LeafletTools <- function(m) {
 }
 
 getJsExpressionForCall=function(callx){
+
   switch(
     callx$method,
     "addMarkers"={
@@ -49,7 +47,7 @@ getJsExpressionForCall=function(callx){
 
       callxArgs |>
         jsonlite::toJSON(auto_unbox = T) -> jsArgs
-      popup = ifelse(is.null(callxArgs$popupContent),NULL,
+      popup = ifelse(is.null(callxArgs$popupContent),"",
                      "mk.bindPopup(args.popupContent,args.popupOptions)")
       "
 // {callx$method}
@@ -62,6 +60,7 @@ mk.addTo(m)
       jsExpression
     },
     "addCircleMarkers"={
+
       ix=c(1,2,3,6,9,12)
       callxArgs <- callx$args
       names(callxArgs)[ix] <-
@@ -73,8 +72,13 @@ mk.addTo(m)
 
       callxArgs |>
         jsonlite::toJSON(auto_unbox = T) -> jsArgs
-      popup = ifelse(is.null(callxArgs$popupContent),NULL,
-                     "mk.bindPopup(args.popupContent,args.popupOptions)")
+
+      if(is.null(callxArgs$popupContent)){
+        popup=""
+      } else {
+        popup="mk.bindPopup(args.popupContent,args.popupOptions)"
+      }
+
       "
 // {callx$method}
 args={jsArgs}
